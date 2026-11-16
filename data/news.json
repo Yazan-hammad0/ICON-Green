@@ -1,1 +1,164 @@
-[]
+[
+  {
+    "id": "n-ifat-2027", "date": "2026-11-11", "kind": "event", "until": "2027-09-06",
+    "title_ar": "معرض ⁦IFAT Saudi Arabia⁩ في الرياض من 4 إلى 6 سبتمبر 2027",
+    "title_en": "IFAT Saudi Arabia set for 4 to 6 September 2027 in Riyadh",
+    "summary_ar": "أعلن المنظمون أن معرض تقنيات النفايات والمياه والبيئة أُعيدت جدولته إلى 4 حتى 6 سبتمبر 2027 في مركز واجهة الرياض للمعارض والمؤتمرات.",
+    "summary_en": "The organisers say the waste, water and environmental technology show has been rescheduled to 4 to 6 September 2027 at Riyadh Front Exhibition and Conference Center.",
+    "why_ar": "أقرب مكان يجتمع فيه مشغلو النفايات والموردون والجهات المنظمة في المملكة تحت سقف واحد.",
+    "why_en": "The closest thing to one room with the Kingdom's waste operators, suppliers and regulators in it.",
+    "source_name": "IFAT Saudi Arabia", "url": "https://www.ifat-saudiarabia.com/",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["all"],
+    "recheck": "Event dates were moved once already. Check the site before planning travel. Date shown is the day the page was last changed."
+  },
+  {
+    "id": "n-qatar-recycling", "date": "2026-10-03", "kind": "news",
+    "title_ar": "قطر توسّع بنية إعادة التدوير: أكثر من 3 ملايين طن من مواد البناء المعاد تدويرها",
+    "title_en": "Qatar expands recycling: more than 3 million tonnes of recycled construction material",
+    "summary_ar": "نقلت «غلف تايمز» عن بيانات وزارة البلدية أن أكثر من 3 ملايين طن من مواد البناء المعاد تدويرها أُنتجت حتى أكتوبر 2025 واستُخدمت في مشاريع عامة، وأن 51 مصنعًا ومشروعًا لإعادة التدوير رُصدت في 2025، منها 25 عاملة.",
+    "summary_en": "Gulf Times, citing Ministry of Municipality data, reports more than 3 million tonnes of recycled construction material produced by October 2025 and used in public projects, and 51 recycling factories and projects identified in 2025, 25 of them operating.",
+    "why_ar": "دليل من دولة مجاورة على أن الجهات العامة تشتري الركام المعاد تدويره حين تتوفر المواصفة.",
+    "why_en": "Proof from next door that public buyers take recycled aggregate once the spec is there.",
+    "source_name": "Gulf Times", "url": "https://www.gulf-times.com/article/734665/qatar/qatar-expands-recycling-infrastructure-to-support-circular-economy",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["construction", "plastic", "metals", "paper", "tyres"]
+  },
+  {
+    "id": "n-sme-strategy", "date": "2026-09-15", "kind": "regulation",
+    "title_ar": "مجلس الوزراء يوافق على الاستراتيجية الوطنية لريادة الأعمال والمنشآت الصغيرة والمتوسطة",
+    "title_en": "Cabinet approves the National Strategy for Entrepreneurship and SMEs",
+    "summary_ar": "بحسب «عرب نيوز»، تضم الاستراتيجية 13 مبادرة لتسهيل الوصول إلى التمويل والأسواق وتحسين سهولة ممارسة الأعمال، وتستهدف رفع مساهمة القطاع في الناتج المحلي إلى 35% وتوفير أكثر من 500 ألف وظيفة مباشرة وغير مباشرة بحلول 2030.",
+    "summary_en": "According to Arab News, the strategy has 13 initiatives to ease access to finance and markets and improve the ease of doing business. It aims to lift the sector's share of GDP to 35 percent and create more than 500,000 direct and indirect jobs by 2030.",
+    "why_ar": "مبادرات التمويل والوصول إلى الأسواق تمس مباشرةً المشاريع الناشئة التي نجهّزها للمستثمرين.",
+    "why_en": "The finance and market access initiatives bear directly on the young companies we prepare for investors.",
+    "source_name": "Arab News", "url": "https://www.arabnews.pk/business/saudi-minister-thanks-leadership-as-cabinet-approves-national-sme-strategy-3001340",
+    "roles": ["founder", "partner", "investor", "team"], "sectors": ["all"],
+    "recheck": "Targets (35 percent of GDP, 500,000 jobs, 2030) are as reported on 15 September 2026."
+  },
+  {
+    "id": "n-mwan-27", "date": "2026-08-25", "kind": "funding",
+    "title_ar": "المركز الوطني لإدارة النفايات يطرح 27 فرصة استثمارية بأكثر من 2 مليار ريال",
+    "title_en": "National Center for Waste Management launches 27 investment opportunities worth over SAR 2 billion",
+    "summary_ar": "بحسب «عاجل» بنسختها الإنجليزية، تشمل الفرص تطوير وتشغيل 33 مرفقًا بالشراكة مع خمس أمانات، منها مرافق لمعالجة مخلفات البناء والهدم ومحطات لفرز النفايات البلدية، موزعة على المدينة المنورة ومكة المكرمة والدمام وتبوك والقصيم.",
+    "summary_en": "Ajel English reports the opportunities cover developing and operating 33 facilities with five municipal authorities, including construction and demolition waste processing and municipal waste sorting plants, spread across Madinah, Makkah, Dammam, Tabuk and Qassim.",
+    "why_ar": "مرافق جديدة تعني طلبًا على التقنية والتشغيل، ومصادر مخلفات منظمة يمكن أن تُبنى عليها مشاريع.",
+    "why_en": "New facilities mean demand for technology and operators, and organised waste supply that projects can build on.",
+    "source_name": "Ajel English", "url": "https://english.ajel.sa/saudi-arabia/s3h9xy16v",
+    "roles": ["founder", "waste_owner", "investor", "team"], "sectors": ["construction", "industrial", "organic"],
+    "recheck": "Values and counts (27 opportunities, 33 facilities, SAR 2 billion) are as announced in August 2026."
+  },
+  {
+    "id": "n-eu-ppwr", "date": "2026-08-12", "kind": "regulation",
+    "title_ar": "لائحة الاتحاد الأوروبي للتعبئة والتغليف تبدأ التطبيق في 12 أغسطس 2026",
+    "title_en": "The EU packaging regulation applies from 12 August 2026",
+    "summary_ar": "اللائحة ⁦(EU) 2025/40⁩ سارية منذ 11 فبراير 2025 وتاريخ تطبيقها 12 أغسطس 2026، وفق المفوضية الأوروبية. تشمل كل العبوات ونفاياتها أيًّا كانت المادة أو المنشأ، وتهدف إلى أن تكون كل العبوات في السوق الأوروبية قابلة لإعادة التدوير بحلول 2030 وإلى زيادة استخدام البلاستيك المعاد تدويره.",
+    "summary_en": "Regulation (EU) 2025/40 has been in force since 11 February 2025 and its application date is 12 August 2026, the European Commission says. It covers all packaging and packaging waste regardless of material or origin, and aims to make all packaging on the EU market recyclable by 2030 and to increase the use of recycled plastics.",
+    "why_ar": "المصدّرون السعوديون إلى أوروبا سيحتاجون عبوات قابلة لإعادة التدوير ومواد معاد تدويرها موثّقة: هذا طلب جديد على مشاريع البلاستيك والورق.",
+    "why_en": "Saudi exporters to Europe will need recyclable packaging and documented recycled material: new demand for plastic and paper projects.",
+    "source_name": "European Commission", "url": "https://environment.ec.europa.eu/topics/waste-and-recycling/packaging-waste_en",
+    "roles": ["founder", "waste_owner", "investor", "team"], "sectors": ["plastic", "paper", "glass", "metals"],
+    "recheck": "Obligations phase in on different dates up to 2030 and beyond. Check the Commission page for the current timeline."
+  },
+  {
+    "id": "n-mewa-report", "date": "2026-08-04", "kind": "news",
+    "title_ar": "وزارة البيئة والمياه والزراعة تنشر تقرير اتجاهات الابتكار في إدارة النفايات",
+    "title_en": "MEWA publishes a report on innovation trends in waste management",
+    "summary_ar": "التقرير صادر عن الوزارة بالتعاون مع المركز الوطني لإدارة النفايات، ويستعرض التقنيات الناشئة والممارسات المبتكرة التي تدعم التحول إلى الاقتصاد الدائري وترفع استرداد الموارد وكفاءة إدارة النفايات.",
+    "summary_en": "Published by the ministry with the National Center for Waste Management, the report reviews emerging technologies and innovative practices that support the move to a circular economy, better resource recovery and more efficient waste management.",
+    "why_ar": "مرجع رسمي يفيد عند كتابة ملف التقييم: أين ترى الجهات المنظمة مستقبل التقنية في القطاع.",
+    "why_en": "An official reference for an assessment file: where the regulators see technology in the sector going.",
+    "source_name": "Ministry of Environment, Water and Agriculture", "url": "https://www.mewa.gov.sa/en/Ministry/Agencies/AgencyLivestock/Topics/Pages/Innovation-Trends-in-Waste-Management.aspx",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["all"],
+    "recheck": "The page gives no publication date. The date shown is its last edit date, 4 August 2026."
+  },
+  {
+    "id": "n-monshaat-ef", "date": "2026-05-17", "kind": "funding",
+    "title_ar": "«منشآت» توقّع مذكرة تفاهم مع صندوق البيئة لتمكين الشركات الناشئة البيئية",
+    "title_en": "Monsha'at signs an MoU with the Environment Fund to empower environmental startups",
+    "summary_ar": "بحسب «شركات مباشر»، تشمل مجالات التعاون تنظيم هاكاثونات وفعاليات، وتبادل البيانات عن القطاعات البيئية ذات الأولوية، وتفعيل برامج حوافز تدعم المشاريع البيئية المبتكرة.",
+    "summary_en": "Sharikat Mubasher reports that cooperation covers hackathons and events, sharing data on priority environmental sectors, and activating incentive programmes for innovative environmental projects.",
+    "why_ar": "برامج الحوافز المنتظرة قد تكون مصدر دعم مبكر لمشاريع في مرحلتي التقييم والتجربة.",
+    "why_en": "The incentive programmes could become early support for projects in the assessment and trial stages.",
+    "source_name": "Sharikat Mubasher", "url": "https://en.sharikatmubasher.com/media-hub/news/21551383/monshaat-pacts-with-environment-fund-to-empower-environmental-startups?lang=en",
+    "roles": ["founder", "investor", "team"], "sectors": ["all"]
+  },
+  {
+    "id": "n-env-week", "date": "2026-05-06", "kind": "news",
+    "title_ar": "أسبوع البيئة السعودي 2026: فرص استثمارية في إدارة النفايات وإعادة التدوير تُقدَّر بـ 450 مليار ريال",
+    "title_en": "Saudi Environment Week 2026: waste management and recycling opportunities put at SAR 450 billion",
+    "summary_ar": "بحسب «عرب نيوز»، أقيم الأسبوع تحت شعار «أثرك أخضر»، وروّج لفرص استثمارية في إدارة النفايات وإعادة التدوير تُقدَّر بـ 450 مليار ريال، مع مستوى وعي عام بالقضايا البيئية يتجاوز 84% وفق وكالة الأنباء السعودية.",
+    "summary_en": "Arab News reports the week ran under the theme Your Impact is Green and promoted investment opportunities in waste management and recycling estimated at SAR 450 billion, with public awareness of environmental issues above 84 percent according to the Saudi Press Agency.",
+    "why_ar": "الرقم يُظهر حجم ما تتوقعه الدولة من القطاع الخاص، لكنه تقدير إجمالي وليس مشاريع مطروحة.",
+    "why_en": "The figure shows how much the state expects from the private sector, but it is a headline estimate, not tendered projects.",
+    "source_name": "Arab News", "url": "https://www.arabnews.pk/saudi-arabia/saudi-environment-week-continues-to-highlight-sustainability-progress-2642563",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["all"],
+    "recheck": "SAR 450 billion is an estimate reported in May 2026. A December 2025 report gave SAR 420 billion."
+  },
+  {
+    "id": "n-mwan-platform", "date": "2026-04-15", "kind": "news",
+    "title_ar": "السعودية تطلق مرحلة إبداء الاهتمام لمنصة رقمية وطنية لإدارة النفايات",
+    "title_en": "Saudi launches expressions of interest for a national digital waste management platform",
+    "summary_ar": "بحسب «زاوية»، أطلق المركز الوطني لإدارة النفايات بالتعاون مع وزارة البيئة والمياه والزراعة وصندوق البيئة والمركز الوطني للتخصيص مرحلة إبداء الاهتمام لتطوير وتشغيل المنصة، في مشروع شراكة بين القطاعين العام والخاص مدته 11 عامًا.",
+    "summary_en": "Zawya reports that the National Center for Waste Management, with MEWA, the Environment Fund and the National Center for Privatization and PPP, launched the expression of interest phase to develop and operate the platform as an 11 year public private partnership.",
+    "why_ar": "حين تُتتبَّع النفايات رقميًا يصبح إثبات الكميات ومصادرها أسهل، وهذا أول ما يطلبه التقييم.",
+    "why_en": "Once waste is tracked digitally, proving quantities and sources gets easier, and that is the first thing an assessment asks for.",
+    "source_name": "Zawya", "url": "https://www.zawya.com/en/projects/industry/saudi-launches-eoi-for-national-digital-platform-for-waste-management-v5tirc9m",
+    "roles": ["waste_owner", "partner", "investor", "team"], "sectors": ["all"]
+  },
+  {
+    "id": "n-licences", "date": "2026-02-12", "kind": "regulation",
+    "title_ar": "وزارة الصناعة تطلق إطار تراخيص وطنيًا لصناعة إعادة التدوير",
+    "title_en": "Ministry of Industry launches a national licensing framework for the recycling industry",
+    "summary_ar": "بحسب مجلة ⁦Waste & Recycling⁩، يضم الإطار ثمانية أنشطة مرخّصة ودليلًا للتراخيص الصناعية، ويستهدف استثمارات خاصة تصل إلى 40 مليار ريال واسترداد 4.2 مليون طن من المواد القابلة لإعادة التدوير بحلول 2035. ويُتوقع أن يستفيد منه أكثر من 235 شركة.",
+    "summary_en": "Waste & Recycling magazine reports the framework has eight licensed activity streams and an industrial permitting guide, and targets up to SAR 40 billion in private investment and 4.2 million tonnes of recyclable materials recovered by 2035. More than 235 companies are expected to benefit.",
+    "why_ar": "إعادة التدوير صارت قطاعًا صناعيًا مستقلًا بترخيص واضح: هذا يختصر طريق التراخيص في ملف أي مشروع.",
+    "why_en": "Recycling is now a stand-alone industrial sector with a clear licence: that shortens the permit route in any project file.",
+    "source_name": "Waste & Recycling", "url": "https://www.wasterecyclingmag.com/news/recycling/saudi-arabia-formalizes-recycling-sector-with-new-industrial-licenses",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["organic", "industrial", "oils", "metals"],
+    "recheck": "Targets (SAR 40 billion, 4.2 million tonnes, 2035) are as reported by a trade magazine citing the ministry. Confirm against the ministry's own text."
+  },
+  {
+    "id": "n-bariq", "date": "2026-02-05", "kind": "news",
+    "title_ar": "«بريق» تتوسع في السعودية بمنشأة في جدة لإنتاج حبيبات ورقائق معاد تدويرها",
+    "title_en": "Bariq expands into Saudi Arabia with a Jeddah facility for recycled pellets and flakes",
+    "summary_ar": "بحسب مجلة ⁦Waste & Recycling⁩، أعلنت الشركة أن المنشأة ستعمل باسم ⁦Creative Recycling⁩ وتنتج حبيبات ورقائق معاد تدويرها وفق معايير جودة دولية لخدمة أسواق المنطقة.",
+    "summary_en": "Waste & Recycling magazine reports the company said the facility will operate as Creative Recycling and make recycled pellets and flakes to international quality standards for regional markets.",
+    "why_ar": "مشترٍ ومنافس محتمل في آن واحد لمشاريع البلاستيك في المنطقة الغربية.",
+    "why_en": "A possible buyer and a competitor at once for plastic projects in the western region.",
+    "source_name": "Waste & Recycling", "url": "https://www.wasterecyclingmag.com/news/plastic-recycling/bariq-expands-operations-into-saudi-arabia-with-new-jeddah-facility",
+    "roles": ["founder", "waste_owner", "investor", "team"], "sectors": ["plastic"]
+  },
+  {
+    "id": "n-sirc-hui", "date": "2026-01-27", "kind": "news",
+    "title_ar": "مجموعة «سرك» توقّع مذكرة تفاهم لتحويل البلاستيك غير القابل لإعادة التدوير إلى وقود طيران مستدام",
+    "title_en": "SIRC Group signs an MoU to turn non-recyclable plastic into sustainable aviation fuel",
+    "summary_ar": "بحسب «شركات مباشر»، وُقّعت المذكرة مع ⁦Hydrogen Utopia International⁩ على هامش معرض ⁦IFAT Saudi Arabia 2026⁩ في الرياض، للتعاون في تحويل النفايات البلاستيكية غير القابلة لإعادة التدوير إلى وقود طيران مستدام ومنتجات هيدروكربونية منخفضة الكربون.",
+    "summary_en": "Sharikat Mubasher reports the MoU with Hydrogen Utopia International was signed on the sidelines of IFAT Saudi Arabia 2026 in Riyadh, to work on converting non-recyclable plastic waste into sustainable aviation fuel and low-carbon hydrocarbon products.",
+    "why_ar": "اللاعبون الكبار يتجهون إلى البلاستيك الذي لا يُعاد تدويره ميكانيكيًا. مذكرة تفاهم فقط، وليست منشأة قائمة بعد.",
+    "why_en": "The large players are moving on the plastic that cannot be recycled mechanically. It is an MoU only, not a plant yet.",
+    "source_name": "Sharikat Mubasher", "url": "https://en.sharikatmubasher.com/news/article/21530830/sirc-group-hydrogen-utopia-international-partner-on-plastic-waste-conversion?lang=en",
+    "roles": ["founder", "partner", "investor", "team"], "sectors": ["plastic"]
+  },
+  {
+    "id": "n-alfursan", "date": "2025-12-23", "kind": "news",
+    "title_ar": "هيئة الطرق والشركة الوطنية للإسكان تعيدان تدوير مخلفات البناء في رصف طرق «الفرسان»",
+    "title_en": "Roads authority and NHC recycle construction waste into roads at Al-Fursan",
+    "summary_ar": "بحسب «عرب نيوز» نقلًا عن وكالة الأنباء السعودية، جُمع وأُعيد تدوير قرابة 350 ألف متر مكعب من مخلفات البناء من داخل موقع المشروع شمال شرق الرياض، واستُخدمت مادة أساس لأعمال الطرق في الحي.",
+    "summary_en": "Arab News, citing the Saudi Press Agency, reports nearly 350,000 cubic metres of construction waste from within the project site in northeastern Riyadh were collected and recycled as base material for the district's roadworks.",
+    "why_ar": "مثال محلي على مشترٍ حكومي للركام المعاد تدويره: أقوى دليل طلب لمشاريع مخلفات البناء والهدم.",
+    "why_en": "A local example of a public buyer for recycled aggregate: the strongest demand evidence for construction and demolition projects.",
+    "source_name": "Arab News", "url": "https://www.arabnews.pk/saudi-arabia/roads-authority-nhc-drive-recycling-initiative-at-alfursan-2627247",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["construction"]
+  },
+  {
+    "id": "n-112bn", "date": "2025-12-15", "kind": "funding",
+    "title_ar": "فرص قطاع النفايات السعودي تُقدَّر بنحو 420 مليار ريال حتى 2040",
+    "title_en": "Saudi waste sector opportunities estimated at about SAR 420 billion by 2040",
+    "summary_ar": "بحسب «عرب نيوز» نقلًا عن «الاقتصادية»، قدّر المركز الوطني لإدارة النفايات الفرص الاستثمارية بنحو 420 مليار ريال حتى 2040. وبلغ عدد الشركات المستثمرة 1,493، ووصلت نسبة النفايات المحوَّلة عن المرادم إلى 18% في 2024، والمستهدف 90% بحلول 2040.",
+    "summary_en": "Arab News, citing Al-Eqtisadiah, reports the National Center for Waste Management estimates investment opportunities at about SAR 420 billion by 2040. Investing companies number 1,493, the share of waste diverted from landfill reached 18 percent in 2024, and the target is 90 percent by 2040.",
+    "why_ar": "الفجوة بين 18% و90% هي السوق: كل نقطة مئوية تحتاج مشاريع مجرَّبة وقابلة للتمويل.",
+    "why_en": "The gap between 18 and 90 percent is the market: every point of it needs trialled, fundable projects.",
+    "source_name": "Arab News", "url": "https://www.arabnews.pk/business/saudi-waste-sector-offers-opportunities-worth-112bn-2626338",
+    "roles": ["founder", "waste_owner", "partner", "investor", "team"], "sectors": ["all"],
+    "recheck": "Figures (SAR 420 billion, 1,493 companies, 18 percent, 90 percent by 2040) are as reported in December 2025."
+  }
+]

@@ -1,5 +1,5 @@
 /* Screen-tall layout for the home-screen app, update card, service worker. Same idea as in Klaar. */
-var ICON_VERSION = "dev", ICON_NEWS = "";
+var ICON_VERSION = "d147fb4393", ICON_NEWS = "First demo of ICON Green";
 (function(){
   var probe = document.createElement("div");
   probe.style.cssText = "position:fixed;left:0;top:0;width:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)";
