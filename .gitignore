@@ -1,0 +1,6 @@
+.DS_Store
+.claude/
+notes.md
+node_modules/
+brief/
+PROMPT.md
