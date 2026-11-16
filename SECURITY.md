@@ -4,8 +4,9 @@
 
 This version is a demo that runs fully in the browser.
 
-- There is no server, no account system and no password.
-- What a visitor types at the demo sign-in is saved in that browser's localStorage only (`iconGreenV1`). It is not sent anywhere.
+- There is no server and no password. `js/config.js` is empty, so no accounts backend is connected.
+- What a visitor types at registration, including their email, is saved in that browser's localStorage only (`iconGreenV1`). It is not sent anywhere.
+- If a backend is connected (docs/BACKEND.md), the email, name, role, city and progress go to that Supabase project, and this file must be updated first.
 - The app loads no third-party scripts, fonts or trackers. The only network requests are for its own files.
 - All companies, people and numbers are demo data. News items link out to their sources.
 

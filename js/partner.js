@@ -24,13 +24,13 @@
   }
   function requests(){
     var p = me(), open = openFor(p), done = repliedBy(p);
-    return '<div class="stack">' + UI.head(t("tab_requests"), {sub: t("requests_sub")}) +
+    return '<div class="stack">' + UI.head(t("tab_requests"), {}) +
       (open.length ? '<div class="list">' + open.map(function(r){ return reqCard(r, true); }).join("") + "</div>" : UI.empty(t("no_requests"))) +
       (done.length ? '<div class="sect"><h2>' + t("replied") + '</h2></div><div class="list">' + done.map(function(r){ return reqCard(r, false); }).join("") + "</div>" : "") + "</div>";
   }
   function offer(){
     var p = me();
-    return '<div class="stack">' + UI.head(t("tab_offer"), {sub: t("offer_sub")}) +
+    return '<div class="stack">' + UI.head(t("tab_offer"), {}) +
       '<form data-form="offer" class="card">' +
         UI.textarea("offers", t("f_offers"), {required: true, value: L(p, "offers"), maxlength: 300}) +
         UI.select("pricing", t("f_pricing"), I18N.keys("pricing"), "pricing", {required: true, value: p.pricing, placeholder: false}) +

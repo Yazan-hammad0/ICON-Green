@@ -86,6 +86,10 @@ Seed files give ages. Any key ending in `_ago` holds a number of days, and the s
 | Investors | `getInvestors()`, `getInvestor(id)`, `getCompanies(investorId)`, `getCompany(id)`, `getPosts(investorId)`, `getMeetings()`, `saveMeeting(m)` |
 | Feed | `getUpdates()`, `saveUpdate(u)`, `getSignups()`, `getNews()`, `refreshNews()` |
 
+### Accounts
+
+`Store.register(profile)` and `Store.confirm(profile, code)` are the only doors. With `js/config.js` empty, `register` saves the user on the device and resolves `{done: true}`. With a backend named, `register` emails a 6-digit code and resolves `{needCode: true}`; `confirm` checks the code, stores the session, saves the profile, and loads progress saved from another device. After that every `persist()` also queues a save of the user's changes to their account. `Store.remoteCounts()` returns sign-up totals for the demand panel. Setup: [BACKEND.md](BACKEND.md).
+
 ### Moving to a real backend
 
 Keep every function name and return shape above. Inside `js/store.js`:

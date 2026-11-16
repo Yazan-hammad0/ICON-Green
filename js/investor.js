@@ -59,7 +59,7 @@
   function deals(rest){
     var list = Store.getProjects().filter(function(p){ return p.stage >= 5; });
     if (rest[0] === "p" && rest[1]){ var one = list.filter(function(p){ return p.id === rest[1]; })[0]; if (one) return deal(one); }
-    return '<div class="stack">' + UI.head(t("tab_deals"), {sub: t("deals_sub")}) +
+    return '<div class="stack">' + UI.head(t("tab_deals"), {}) +
       (list.length ? '<div class="list">' + list.map(function(p){
         return '<a class="card" href="#/deals/p/' + p.id + '"><div class="between"><h2 dir="auto">' + esc(L(p, "name")) + "</h2>" + UI.chev() + "</div>" +
           '<div class="row">' + UI.pill(I18N.opt("waste", p.waste)) + UI.stagePill(p) + (requested(p.id) ? UI.pill(t("meeting_requested"), "lime") : "") + "</div>" +
@@ -80,7 +80,7 @@
   function insights(){
     var sectors = mySectors(), list = companies();
     var items = News.newsFor("investor").filter(function(n){ return !n.sectors || !n.sectors.length || n.sectors.indexOf("all") >= 0 || n.sectors.some(function(s){ return sectors.indexOf(s) >= 0; }); });
-    return '<div class="stack">' + UI.head(t("tab_insights"), {demo: false, sub: t("insights_sub")}) +
+    return '<div class="stack">' + UI.head(t("tab_insights"), {demo: false}) +
       '<div class="row">' + sectors.map(function(s){ return UI.pill(I18N.opt("waste", s)); }).join("") + "</div>" +
       (items.length ? '<div class="list">' + items.map(function(n){
         var hit = list.filter(function(c){ return (n.sectors || []).indexOf(c.waste) >= 0; });
@@ -90,7 +90,7 @@
   }
   function updates(){
     var posts = Store.getPosts(me().id);
-    return '<div class="stack">' + UI.head(t("tab_updates"), {sub: t("inv_updates_sub")}) + (posts.length ? '<div class="list">' + posts.map(postCard).join("") + "</div>" : UI.empty(t("no_updates"))) + "</div>";
+    return '<div class="stack">' + UI.head(t("tab_updates"), {}) + (posts.length ? '<div class="list">' + posts.map(postCard).join("") + "</div>" : UI.empty(t("no_updates"))) + "</div>";
   }
 
   App.actions["request-meeting"] = function(d){

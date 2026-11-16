@@ -39,7 +39,7 @@
     }
     return '<div class="stack">' + UI.head(L(p, "name")) +
       UI.kv([[t("waste_type"), I18N.opt("waste", p.waste)], [t("city"), I18N.opt("city", p.city)], [t("tonnes_month"), UI.tonnes(p.tonnes)], [t("days_here"), UI.num(UI.daysSince(p.since))]]) +
-      '<p class="soft small">' + t("gate_rule") + '</p><div class="list">' + rows + "</div></div>";
+      '<div class="list">' + rows + "</div></div>";
   }
 
   function stage(p, i){
@@ -75,7 +75,7 @@
   function submit(rest){
     var kind = rest[0] === "challenge" ? "challenge" : "idea", ch = Store.getChallenges(), W = I18N.keys("waste");
     var mineAll = Store.myProjects().filter(function(p){ return p.submitted; });
-    var html = '<div class="stack">' + UI.head(t("submit_title"), {demo: false, sub: t("submit_sub")}) +
+    var html = '<div class="stack">' + UI.head(t("submit_title"), {demo: false}) +
       '<div class="seg" role="group" aria-label="' + esc(t("submit_kind")) + '"><button type="button" data-act="submit-kind" data-kind="idea" aria-pressed="' + (kind === "idea") + '">' + t("submit_idea") + "</button>" +
       '<button type="button" data-act="submit-kind" data-kind="challenge" aria-pressed="' + (kind === "challenge") + '">' + t("submit_challenge") + "</button></div>" +
       '<form data-form="submit-project" data-kind="' + kind + '">';

@@ -2,6 +2,20 @@
 
 All notable changes to the ICON Green app. Newest first.
 
+## 0.2.0, 17 November 2026
+
+Less text, clearer value, real registration path, motion.
+
+### Added
+- Welcome shows what each kind of user gets: pick founder, waste owner, partner or investor and see three benefits and a sample of the first screen.
+- Registration by name and email. With the backend connected (`docs/BACKEND.md`) it uses an emailed 6-digit code, saves progress to the account and counts sign-ups across devices. Without it, the account stays on the device.
+- Install guide that detects the browser (Safari, Chrome, Samsung Internet, Firefox, in-app browsers, desktop) and plays the three steps for it on a small animated screen. On a phone it is the first thing a new visitor sees.
+- Motion: screens arrive as a cascade, the journey draws itself, charts and bars fill in, numbers count up, touch feedback on buttons and cards. All of it is off when the device asks for reduced motion.
+
+### Changed
+- Much shorter copy on the welcome screen and across the role screens.
+- Registration asks for fewer fields.
+
 ## 0.1.0, 16 November 2026
 
 First demo for the ICON team.

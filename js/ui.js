@@ -101,7 +101,7 @@ var UI = (function(){
     var line = pts.map(function(p, i){ return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
     var last = pts[pts.length - 1];
     return '<svg class="spark ' + (tone || "") + '" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" role="img" aria-label="' + esc(t("chart_label", {a: sarShort(vals[0]), b: sarShort(vals[vals.length - 1])})) + '">' +
-      '<path class="ar" d="' + line + " L" + last[0].toFixed(1) + " " + h + " L" + pts[0][0].toFixed(1) + " " + h + ' Z"/><path class="ln" d="' + line + '" vector-effect="non-scaling-stroke"/></svg>';
+      '<path class="ar" d="' + line + " L" + last[0].toFixed(1) + " " + h + " L" + pts[0][0].toFixed(1) + " " + h + ' Z"/><path class="ln" pathLength="1" d="' + line + '" vector-effect="non-scaling-stroke"/></svg>';
   }
 
   /* ---- form parts ---- */
@@ -142,6 +142,25 @@ var UI = (function(){
     return o;
   }
 
+  /* numbers in summary tiles count up once when a screen opens */
+  function countUp(rootEl){
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    Array.prototype.forEach.call(rootEl.querySelectorAll(".sumgrid b.num"), function(el){
+      if (el.children.length) return;
+      var full = el.textContent, m = /(\d[\d,]*\.?\d*)/.exec(full); if (!m) return;
+      var target = parseFloat(m[1].replace(/,/g, "")), dec = (m[1].split(".")[1] || "").length, t0 = null;
+      if (!isFinite(target) || target === 0) return;
+      function frame(ts){
+        if (!el.isConnected) return;
+        if (t0 === null) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 700), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = k === 1 ? full : full.replace(m[1], (target * e).toLocaleString("en-US", {minimumFractionDigits: dec, maximumFractionDigits: dec}));
+        if (k < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
   var toastTimer = null;
   function toast(msg){
     var el = document.getElementById("toast"); if (!el) return;
@@ -150,5 +169,5 @@ var UI = (function(){
   }
 
   return {esc: esc, L: L, num: num, sar: sar, sarShort: sarShort, tonnes: tonnes, date: date, daysSince: daysSince, icon: icon, chev: chev, demo: demo, head: head, pill: pill, empty: empty, kv: kv, bars: bars,
-    route: route, stagePill: stagePill, spark: spark, opts: opts, field: field, input: input, textarea: textarea, select: select, chips: chips, formData: formData, toast: toast};
+    route: route, stagePill: stagePill, spark: spark, opts: opts, field: field, input: input, textarea: textarea, select: select, chips: chips, formData: formData, toast: toast, countUp: countUp};
 })();

@@ -17,7 +17,7 @@
       cols += '<section class="col"><h2><span>' + i + ". " + esc(I18N.stage(i).name) + "</span>" + UI.pill(String(list.length)) + "</h2>" +
         (list.length ? '<div class="list">' + list.map(projCard).join("") + "</div>" : '<p class="soft small">' + t("col_empty") + "</p>") + "</section>";
     }
-    return {wide: true, html: '<div class="stack">' + UI.head(t("tab_pipeline"), {sub: t("pipeline_sub", {n: all.length})}) + '<div class="board">' + cols + "</div></div>"};
+    return {wide: true, html: '<div class="stack">' + UI.head(t("tab_pipeline")) + '<div class="board">' + cols + "</div></div>"};
   }
   function project(p){
     var s = I18N.stage(p.stage), failed = Screens.shared.isFailed(p, p.stage), c = Screens.shared.checks(p, p.stage), done = c.filter(Boolean).length;
@@ -41,12 +41,24 @@
   function rows(map, group, order){
     return Object.keys(map).sort(function(a, b){ return order ? order.indexOf(a) - order.indexOf(b) : map[b] - map[a]; }).map(function(k){ return [I18N.opt(group, k), map[k]]; });
   }
+  var remote; /* sign-up totals from the backend: undefined = not asked yet, null = not available */
+  function askRemote(){
+    if (remote !== undefined || Store.accountMode() !== "cloud") return;
+    remote = null;
+    Store.remoteCounts().then(function(rows){ if (rows && rows.length){ remote = rows; if (App.parts()[0] === "demand") App.render(); } });
+  }
+  function remoteCard(){
+    if (!remote) return "";
+    var by = {}, total = 0; remote.forEach(function(r){ by[r.role] = (by[r.role] || 0) + Number(r.n || 0); total += Number(r.n || 0); });
+    return '<div class="card"><p class="eyebrow">' + t("demand_cloud", {n: total}) + "</p><h2>" + t("dm_real_by_role") + "</h2>" + UI.bars(rows(by, "role", App.ROLES)) + "</div>";
+  }
   function demand(){
+    askRemote();
     var su = Store.getSignups(), streams = Store.getStreams(), partners = Store.getPartners(), ch = Store.getChallenges(), meetings = Store.getMeetings();
     var local = su.filter(function(s){ return s.local; }).length;
     var waste = count(su, "waste"); streams.forEach(function(s){ waste[s.waste] = (waste[s.waste] || 0) + 1; });
     var types = I18N.keys("partner_type");
-    return '<div class="stack">' + UI.head(t("tab_demand"), {sub: t("demand_sub")}) + '<p class="note">' + t("demand_honest", {n: local}) + "</p>" +
+    return '<div class="stack">' + UI.head(t("tab_demand"), {}) + '<p class="note">' + t("demand_honest", {n: local}) + "</p>" + remoteCard() +
       '<div class="card deep"><div class="sumgrid">' +
         '<div><b class="num">' + su.length + '</b><span class="soft">' + t("dm_signups") + "</span></div>" +
         '<div><b class="num">' + ch.length + '</b><span class="soft">' + t("dm_challenges") + "</span></div>" +
@@ -78,7 +90,7 @@
   }
   function inbox(){
     var items = inboxItems();
-    return '<div class="stack">' + UI.head(t("tab_inbox"), {sub: t("inbox_sub")}) + '<div class="list">' + items.map(function(it){
+    return '<div class="stack">' + UI.head(t("tab_inbox"), {}) + '<div class="list">' + items.map(function(it){
       var tone = it.kind === "in_declined" ? "" : it.kind === "in_meeting" || it.kind === "in_review" ? "lime" : it.kind === "in_accepted" ? "green" : "";
       var inner = '<div class="between"><div class="row">' + UI.pill(t(it.kind), tone) + (it.local ? UI.pill(t("new"), "green") : "") + '</div><span class="soft small" style="white-space:nowrap">' + UI.date(it.date) + "</span></div>" +
         '<h3 dir="auto">' + esc(it.text) + '</h3><p class="soft small" dir="auto">' + esc(it.sub) + "</p>";
@@ -87,7 +99,7 @@
   }
   function updates(){
     var roles = App.ROLES.filter(function(r){ return r !== "team"; }), list = Store.getUpdates().filter(function(u){ return u.kind === "icon"; });
-    return '<div class="stack">' + UI.head(t("write_update"), {demo: false, sub: t("write_update_sub")}) +
+    return '<div class="stack">' + UI.head(t("write_update"), {demo: false}) +
       '<form data-form="post-update" class="card">' + UI.input("title", t("f_title"), {required: true, maxlength: 90}) + UI.textarea("body", t("f_body"), {required: true, maxlength: 400}) +
         UI.chips("roles", t("f_roles"), roles, "role", roles) + '<button class="btn pop" type="submit">' + t("publish") + "</button></form>" +
       '<div class="sect"><h2>' + t("published") + '</h2></div><div class="list">' + list.map(function(u){

@@ -31,12 +31,12 @@ var App = (function(){
     var lang = I18N.lang();
     return '<div class="stack">' + UI.head(t("profile"), {demo: false}) +
       '<div class="card"><div class="row"><span class="avatar" aria-hidden="true">' + esc((user.name || "?").trim().charAt(0).toUpperCase()) + '</span><div class="grow"><h2 dir="auto">' + esc(user.name) + '</h2><p class="soft small">' + esc(I18N.opt("role", user.role)) + "</p>" + (user.org ? '<p class="soft small" dir="auto">' + esc(user.org) + "</p>" : "") + "</div></div>" +
-      '<p class="note">' + t("demo_signin_note") + "</p></div>" +
+      '<p class="note">' + t("account") + ": " + (user.email ? '<span class="ltr">' + esc(user.email) + "</span>. " : "") + t(Store.accountMode() === "cloud" ? "account_cloud" : "account_device") + ".</p></div>" +
       '<div class="card"><h2>' + t("language") + '</h2><div class="seg" role="group" aria-label="' + esc(t("language")) + '">' +
         '<button type="button" data-act="lang" data-lang="ar" lang="ar" aria-pressed="' + (lang === "ar") + '">العربية</button>' +
         '<button type="button" data-act="lang" data-lang="en" lang="en" aria-pressed="' + (lang === "en") + '">English</button></div>' +
         '<p class="soft small">' + t("theme_note") + "</p></div>" +
-      '<div class="card"><div class="between"><h2>' + t("switch_role") + "</h2>" + UI.demo() + '</div><p class="soft small">' + t("switch_role_note") + '</p><div class="list">' +
+      '<div class="card"><div class="between"><h2>' + t("switch_role") + "</h2>" + UI.demo() + '</div><div class="list">' +
         ROLES.map(function(r){
           return '<button type="button" class="card rolecard" data-act="switch-role" data-role="' + r + '"' + (r === user.role ? ' aria-current="true"' : "") + '><span class="ric">' + UI.icon(ROLE_ICON[r]) + "</span><span><b>" + esc(I18N.opt("role", r)) + "</b>" +
             (r === user.role ? "<span>" + t("current_role") + "</span>" : "") + "</span>" + UI.chev() + "</button>";
@@ -50,13 +50,15 @@ var App = (function(){
   function render(){
     var user = Store.getUser(), p = parts(), html, wide = false, route = p.join("/");
     document.body.classList.remove("bare");
-    if (!user){
+    /* a new visitor on a phone sees the install guide for their browser first */
+    if (!user && p[0] !== "install" && p[0] !== "signin" && Onboard.auto()){ history.replaceState(null, "", "#/install"); p = ["install"]; route = "install"; }
+    if (p[0] === "install"){
+      top.hidden = true; tabbar.hidden = true; document.body.classList.add("bare");
+      html = Onboard.render();
+    } else if (!user){
       if (p[0] !== "welcome" && p[0] !== "signin"){ history.replaceState(null, "", "#/welcome"); p = ["welcome"]; route = "welcome"; }
       top.hidden = true; tabbar.hidden = true; document.body.classList.add("bare");
       html = Auth.render(p);
-    } else if (p[0] === "install"){
-      top.hidden = true; tabbar.hidden = true; document.body.classList.add("bare");
-      html = Onboard.render();
     } else {
       var def = header(user), list = def.tabs || [], tab = p[0];
       if (tab === "welcome" || tab === "signin" || !tab || (tab !== "profile" && !list.some(function(x){ return x.id === tab; }))){
@@ -70,7 +72,13 @@ var App = (function(){
     main.classList.toggle("wide", wide);
     main.innerHTML = html || "";
     document.title = Brand.name;
-    if (route !== lastRoute){ scrollTop0(); if (lastRoute !== null) main.focus({preventScroll: true}); lastRoute = route; }
+    Onboard.mount(p[0] === "install");
+    if (route !== lastRoute){
+      scrollTop0(); if (lastRoute !== null) main.focus({preventScroll: true}); lastRoute = route;
+      /* entrance motion plays once per screen, not on every re-render after a tap */
+      [main, tabbar].forEach(function(el){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); });
+      UI.countUp(main);
+    }
   }
 
   /* ---- one place for clicks, changes and form submits ---- */

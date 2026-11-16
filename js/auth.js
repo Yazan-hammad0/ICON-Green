@@ -1,62 +1,102 @@
-/* Before sign-in: welcome, then pick a role, then a short demo sign-in form. No password, nothing leaves the device. */
+/* Before sign-in: a short welcome with a "what you get" showcase per role, then registration by email.
+   On the device registration is instant. With a backend connected (js/config.js) it asks for an emailed 6-digit code. */
 var Auth = (function(){
   var t = function(k, v){ return I18N.t(k, v); }, esc = UI.esc;
+  var SHOW = ["founder", "waste_owner", "partner", "investor"], show = "founder", pending = null, busy = false;
 
   function langButton(){
     var other = I18N.lang() === "ar" ? "en" : "ar";
     return '<button type="button" class="btn small langbtn" data-act="lang" data-lang="' + other + '" lang="' + other + '">' + (other === "en" ? "English" : "العربية") + "</button>";
   }
-  function welcome(){
-    var chips = "";
-    for (var i = 1; i <= 6; i++) chips += "<span><b>" + i + "</b>" + esc(I18N.stage(i).name) + "</span>";
-    return '<div class="welcome">' + langButton() +
-      '<div class="plate">' + Brand.logoImg() + "</div>" +
-      '<div class="hero"><h1>' + t("idea_line") + "</h1><p>" + t("idea_sub") + "</p></div>" +
-      '<div class="card wcard"><p class="eyebrow">' + t("w_problem_eyebrow") + "</p><h2>" + t("w_problem_title") + "</h2><ul>" +
-        [1, 2, 3, 4, 5].map(function(n){ return "<li>" + t("w_problem_" + n) + "</li>"; }).join("") + "</ul></div>" +
-      '<div class="card wcard"><p class="eyebrow">' + t("w_journey_eyebrow") + "</p><h2>" + t("w_journey_title") + '</h2><div class="stagechips">' + chips + '</div><p class="soft small">' + t("w_journey_note") + "</p></div>" +
-      '<div class="card deep wcard"><p class="eyebrow">' + t("w_partner_eyebrow") + "</p><h2>" + t("w_partner_title") + '</h2><p class="soft">' + t("w_partner_text") + "</p></div>" +
-      '<a class="btn pop" href="#/signin">' + t("get_started") + "</a>" +
-      '<p class="soft small" style="text-align:center">' + t("w_demo_note") + "</p></div>";
+  /* a small, honest sample of the first thing each role sees */
+  function preview(r){
+    var inner;
+    if (r === "founder") inner = '<div class="card deep"><p class="eyebrow">' + t("do_next") + "</p><h3>" + t("pv_next") + "</h3></div>" + UI.route(2, false);
+    else if (r === "waste_owner") inner = '<div class="card"><h3>' + t("pv_stream") + '</h3><div class="row">' + UI.pill(t("st_challenge"), "lime") + UI.pill(t("solutions_n", {n: 2}), "green") + "</div></div>";
+    else if (r === "partner") inner = '<div class="card"><div class="between"><h3>' + t("pv_request") + "</h3>" + UI.pill(I18N.opt("req_kind", "lab_test")) + '</div><div class="btnrow"><span class="btn small fake">' + t("accept") + '</span><span class="btn small quiet fake">' + t("decline") + "</span></div></div>";
+    else inner = '<div class="card"><div class="between"><h3>' + t("pv_company") + '</h3><span class="pill green"><i></i>' + t("health_green") + "</span></div>" + UI.spark([210, 225, 240, 262, 281, 305]) + "</div>";
+    return '<div class="preview" inert><div class="between"><span class="eyebrow">' + t("you_see") + '</span><span class="pill demo">' + t("example") + "</span></div>" + inner + "</div>";
   }
-  function roles(){
-    return '<div class="stack"><a class="back" href="#/welcome">' + UI.icon("back", "flip") + t("back") + "</a>" +
-      "<h1>" + t("who_are_you") + '</h1><p class="soft">' + t("who_are_you_sub") + '</p><div class="list">' +
-      App.ROLES.map(function(r){
-        return '<a class="card rolecard" href="#/signin/' + r + '"><span class="ric">' + UI.icon(App.ROLE_ICON[r]) + "</span><span><b>" + esc(I18N.opt("role", r)) + "</b><span>" + esc(I18N.opt("role_value", r)) + "</span></span>" + UI.chev() + "</a>";
-      }).join("") + "</div></div>";
+  function welcome(){
+    var how = "";
+    for (var i = 1; i <= 3; i++) how += '<li><b>' + i + "</b><span>" + t("how_" + i) + "</span></li>";
+    return '<div class="welcome">' + langButton() +
+      '<div class="hero"><div class="plate">' + Brand.logoImg() + "</div><h1>" + t("idea_line") + "</h1><p>" + t("idea_sub") + '</p><ol class="how">' + how + "</ol></div>" +
+      '<h2 class="pick">' + t("pick_you") + "</h2>" +
+      '<div class="rolepick" role="tablist" aria-label="' + esc(t("pick_you")) + '">' + SHOW.map(function(r){
+        return '<button type="button" role="tab" aria-selected="' + (r === show) + '" data-act="show-role" data-role="' + r + '">' + UI.icon(App.ROLE_ICON[r]) + "<span>" + esc(I18N.opt("role_short", r)) + "</span></button>";
+      }).join("") + "</div>" +
+      '<div class="card showcase" role="tabpanel" id="showcase"><h2>' + t("sc_" + show) + '</h2><ul class="gets">' +
+        [1, 2, 3].map(function(n){ return "<li>" + UI.icon("check") + "<span>" + t("sc_" + show + "_" + n) + "</span></li>"; }).join("") + "</ul>" + preview(show) +
+        '<a class="btn pop" href="#/signin/' + show + '">' + t("start_as", {role: I18N.opt("role_short", show)}) + "</a></div>" +
+      '<div class="btnrow">' + (window.ICON_SHELL && ICON_SHELL.standalone() ? "" : '<a class="btn small" href="#/install">' + t("install_title") + "</a>") + '<a class="btn small quiet" href="#/signin/team">' + t("team_link") + "</a></div>" +
+      '<p class="soft small center">' + t("w_demo_note") + "</p></div>";
   }
   function roleFields(r){
     var W = I18N.keys("waste");
-    if (r === "founder") return UI.select("waste", t("f_waste"), W, "waste", {required: true}) + UI.select("idea_stage", t("f_idea_stage"), I18N.keys("idea_stage"), "idea_stage", {required: true});
+    if (r === "founder") return UI.select("waste", t("f_waste"), W, "waste", {required: true});
     if (r === "waste_owner") return UI.select("waste", t("f_waste_have"), W, "waste", {required: true}) + UI.input("tonnes", t("f_tonnes"), {type: "number", min: 0, max: 100000, inputmode: "decimal", required: true});
-    if (r === "partner") return UI.select("partner_type", t("f_partner_type"), I18N.keys("partner_type"), "partner_type", {required: true}) + UI.textarea("offers", t("f_offers"), {maxlength: 300, optional: true});
+    if (r === "partner") return UI.select("partner_type", t("f_partner_type"), I18N.keys("partner_type"), "partner_type", {required: true});
     if (r === "investor") return UI.select("investor_type", t("f_investor_type"), I18N.keys("investor_type"), "investor_type", {required: true}) +
-      UI.chips("sectors", t("f_sectors"), W.filter(function(k){ return k !== "other"; }), "waste", []) + UI.select("ticket", t("f_ticket"), I18N.keys("ticket"), "ticket", {optional: true});
+      UI.chips("sectors", t("f_sectors"), W.filter(function(k){ return k !== "other"; }), "waste", []);
     return "";
   }
   function form(r){
-    return '<div class="stack"><a class="back" href="#/signin">' + UI.icon("back", "flip") + t("back") + "</a>" +
-      '<div class="row"><span class="rolecard" style="display:contents"><span class="ric">' + UI.icon(App.ROLE_ICON[r]) + '</span></span><div class="grow"><h1>' + esc(I18N.opt("role", r)) + '</h1><p class="soft small">' + esc(I18N.opt("role_value", r)) + "</p></div></div>" +
-      '<p class="note">' + t("demo_signin_note") + "</p>" +
+    var cloud = Store.accountMode() === "cloud";
+    return '<div class="stack"><a class="back" href="#/welcome">' + UI.icon("back", "flip") + t("back") + "</a>" +
+      '<div class="row"><span class="ric">' + UI.icon(App.ROLE_ICON[r]) + '</span><div class="grow"><h1>' + t("reg_title") + '</h1><p class="soft small">' + esc(I18N.opt("role", r)) + "</p></div></div>" +
       '<form data-form="signin" data-role="' + r + '">' +
-        UI.input("name", t("f_name"), {required: true, maxlength: 60, autocomplete: "off"}) +
-        (r === "team" ? "" : UI.input("org", t("f_org"), {optional: true, maxlength: 80})) +
+        UI.input("name", t("f_name"), {required: true, maxlength: 60, autocomplete: "name"}) +
+        UI.input("email", t("f_email"), {type: "email", required: true, maxlength: 120, autocomplete: "email", inputmode: "email"}) +
         UI.select("city", t("f_city"), I18N.keys("city"), "city", {required: true}) +
         roleFields(r) +
-        '<button class="btn pop" type="submit">' + t("demo_enter") + "</button></form></div>";
+        '<p class="formerr" id="formerr" role="alert" hidden></p>' +
+        '<button class="btn pop" type="submit">' + t(cloud ? "reg_send" : "reg_go") + "</button>" +
+        '<p class="soft small">' + t(cloud ? "reg_note_cloud" : "reg_note_device") + "</p></form></div>";
+  }
+  function codeStep(){
+    return '<div class="stack"><a class="back" href="#/signin/' + pending.role + '">' + UI.icon("back", "flip") + t("back") + "</a>" +
+      "<h1>" + t("code_title") + '</h1><p class="soft">' + t("code_sub", {email: '<b class="ltr">' + esc(pending.email) + "</b>"}) + "</p>" +
+      '<form data-form="code">' + UI.input("code", t("f_code"), {required: true, maxlength: 8, inputmode: "numeric", autocomplete: "one-time-code"}) +
+        '<p class="formerr" id="formerr" role="alert" hidden></p>' +
+        '<button class="btn pop" type="submit">' + t("code_go") + "</button></form>" +
+      '<button type="button" class="btn small quiet" data-act="code-again">' + t("code_again") + "</button></div>";
   }
   function render(p){
-    if (p[0] === "signin") return p[1] && App.ROLES.indexOf(p[1]) >= 0 ? form(p[1]) : roles();
+    if (p[0] === "signin"){
+      if (p[1] === "code" && pending) return codeStep();
+      return p[1] && App.ROLES.indexOf(p[1]) >= 0 ? form(p[1]) : welcome();
+    }
     return welcome();
   }
+  function fail(msg){ var el = document.getElementById("formerr"); if (el){ el.textContent = msg; el.hidden = false; } }
+  function enter(){ pending = null; App.go("#/"); }
 
-  App.forms.signin = function(d, formEl){
-    var role = formEl.getAttribute("data-role"), fields = {};
-    ["waste", "idea_stage", "tonnes", "partner_type", "offers", "investor_type", "sectors", "ticket"].forEach(function(k){ if (d[k] !== undefined && d[k] !== "") fields[k] = k === "tonnes" ? Number(d[k]) : d[k]; });
-    Store.signIn({role: role, name: d.name, org: d.org, city: d.city, fields: fields});
-    App.go(window.ICON_SHELL && ICON_SHELL.standalone() || Store.installSeen() ? "#/" : "#/install");
+  App.actions["show-role"] = function(d){
+    if (SHOW.indexOf(d.role) < 0 || d.role === show) return;
+    show = d.role; App.render();
+    var el = document.getElementById("showcase"); if (el) el.classList.add("swap");
+    var tab = document.querySelector('.rolepick [data-role="' + show + '"]'); if (tab) tab.focus({preventScroll: true});
   };
+  App.forms.signin = function(d, formEl){
+    if (busy) return;
+    var role = formEl.getAttribute("data-role"), fields = {};
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email || "")){ fail(t("email_bad")); return; }
+    ["waste", "tonnes", "partner_type", "investor_type", "sectors"].forEach(function(k){ if (d[k] !== undefined && d[k] !== "") fields[k] = k === "tonnes" ? Number(d[k]) : d[k]; });
+    var profile = {role: role, name: d.name, email: d.email.toLowerCase(), city: d.city, fields: fields};
+    var btn = formEl.querySelector("button[type=submit]"); busy = true; if (btn) btn.setAttribute("aria-busy", "true");
+    Store.register(profile).then(function(res){
+      busy = false;
+      if (res.needCode){ pending = profile; App.go("#/signin/code"); } else enter();
+    }).catch(function(){ busy = false; if (btn) btn.removeAttribute("aria-busy"); fail(t("net_bad")); });
+  };
+  App.forms.code = function(d, formEl){
+    if (busy || !pending) return;
+    var btn = formEl.querySelector("button[type=submit]"); busy = true; if (btn) btn.setAttribute("aria-busy", "true");
+    Store.confirm(pending, String(d.code || "").replace(/\s+/g, "")).then(function(){ busy = false; enter(); })
+      .catch(function(e){ busy = false; if (btn) btn.removeAttribute("aria-busy"); fail(t(e && e.status ? "code_bad" : "net_bad")); });
+  };
+  App.actions["code-again"] = function(){ if (!pending) return; Store.register(pending).then(function(){ UI.toast(t("code_sent")); }).catch(function(){ fail(t("net_bad")); }); };
 
   return {render: render};
 })();

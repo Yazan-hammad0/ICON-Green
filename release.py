@@ -9,7 +9,7 @@ import hashlib, re, sys, pathlib
 root = pathlib.Path(__file__).parent
 news = (sys.argv[1] if len(sys.argv) > 1 else "Small fixes and improvements.").replace('"', "'")
 files = ["index.html", "css/app.css", "manifest.webmanifest",
-         "js/brand.js", "js/i18n.js", "js/store.js", "js/ui.js", "js/news.js", "js/auth.js", "js/onboard.js",
+         "js/brand.js", "js/i18n.js", "js/config.js", "js/backend.js", "js/store.js", "js/ui.js", "js/news.js", "js/auth.js", "js/onboard.js",
          "js/founder.js", "js/waste.js", "js/partner.js", "js/investor.js", "js/team.js", "js/app.js",
          "data/projects.json", "data/waste.json", "data/partners.json", "data/investors.json", "data/activity.json"]
 STAMP = r'var ICON_VERSION = "[^"]*", ICON_NEWS = "[^"]*";'

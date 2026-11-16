@@ -19,7 +19,7 @@ One app for everyone in the ICON Green ecosystem: founders, waste owners, partne
 ---
 
 > [!IMPORTANT]
-> **This is a demo.** There are no real projects, partners or investors in it yet. Every company, person, number and project is invented and labelled "بيانات تجريبية / Demo data" in the app. Only the news items are real, and each one links to its source. Sign-in has no password and nothing leaves your device.
+> **This is a demo.** There are no real projects, partners or investors in it yet. Every company, person, number and project is invented and labelled "بيانات تجريبية / Demo data" in the app. Only the news items are real, and each one links to its source. Accounts are kept on the device until a backend is connected (see [docs/BACKEND.md](docs/BACKEND.md)).
 
 ## What it is
 
@@ -45,17 +45,17 @@ This app is the first working version of that journey: mobile first, Arabic firs
     <td><img src="docs/screenshots/investor-portfolio-en-dark.png" width="230" alt="Investor portfolio in English, dark theme"></td>
   </tr>
   <tr>
-    <td align="center">Welcome</td>
+    <td align="center">Welcome: what you get</td>
     <td align="center">Founder: do this next</td>
     <td align="center">Investor: portfolio health</td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/partner-requests-ar-dark.png" width="230" alt="Partner requests in Arabic, dark theme"></td>
+    <td><img src="docs/screenshots/install-en-dark.png" width="230" alt="Install guide for the visitor's browser, dark theme"></td>
     <td><img src="docs/screenshots/team-demand-en.png" width="230" alt="Team demand panel in English"></td>
     <td><img src="docs/screenshots/insights-en.png" width="230" alt="Insights with real news in English"></td>
   </tr>
   <tr>
-    <td align="center">Partner: requests</td>
+    <td align="center">Install guide per browser</td>
     <td align="center">Team: demand panel</td>
     <td align="center">Real news with sources</td>
   </tr>
@@ -65,11 +65,11 @@ This app is the first working version of that journey: mobile first, Arabic firs
 
 ## Try it in one minute
 
-1. Open the **[live demo](https://yazan-hammad0.github.io/ICON-Green/)** on your phone or laptop.
-2. Tap **ابدأ / Get started**, pick a role, type any name.
+1. Open the **[live demo](https://yazan-hammad0.github.io/ICON-Green/)** on your phone or laptop. On a phone it first plays the install steps for your exact browser.
+2. Pick what describes you to see what you get, then tap **Start** and register with a name and email.
 3. Tap the round button at the top to open the profile. **Switch role (demo)** shows the app as each side sees it. The language switch is there too.
 
-To install it on a phone: iPhone Safari, Share, then Add to Home Screen. Android Chrome, the ⋮ menu, then Add to Home screen. The app shows these steps after sign-in.
+The install guide recognises Safari, Chrome, Samsung Internet, Firefox, in-app browsers and desktop browsers, and shows the three steps for that one.
 
 ## One app, five roles
 
@@ -105,12 +105,14 @@ css/app.css             all styles, light and dark, logical properties for RTL
 js/
   brand.js              every logo reference, in one place
   i18n.js               every string, Arabic and English, plus the six stages
+  config.js             the two backend values (empty = accounts stay on the device)
+  backend.js            talks to the accounts backend, only store.js calls it
   store.js              the only file that reads or writes data
   ui.js                 helpers: formatting, icons, forms, route, line chart
   app.js                routing, header, tab bar, profile
   news.js               news cards and the updates feed
-  auth.js               welcome and demo sign-in
-  onboard.js            install guide
+  auth.js               welcome, role showcase, registration by email
+  onboard.js            install guide that plays the steps for the visitor's browser
   founder.js  waste.js  partner.js  investor.js  team.js   one file per role
   shell.js              screen-tall layout for the home-screen app, update card
 data/
@@ -176,6 +178,10 @@ Add an item to `data/news.json` and push. No release is needed for news alone: t
 
 Every item must be real, dated and linked, and someone must open the link and check that it says what the summary says. If it cannot be checked, leave it out. Items with a figure or date that can change carry a `recheck` note. The fields are listed in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#news).
 
+## Accounts
+
+Registration asks for a name and an email. Out of the box the account lives on the device, because GitHub Pages cannot store anything. Fill in two values in `js/config.js` and it becomes real: a 6-digit code by email, one account per email, progress saved to the account, and sign-ups counted across devices. The 15 minute setup is in [docs/BACKEND.md](docs/BACKEND.md).
+
 ## Swapping in a real backend
 
 Screens never touch storage. They call `Store.getProjects()`, `Store.saveProject()`, `Store.signIn()` and so on. To move to Supabase or a Cloudflare Worker, keep those names and what they return, and replace three private pieces inside `js/store.js`:
@@ -196,7 +202,7 @@ Then commit and push. Without the stamp, installed apps never notice the change.
 
 ## Roadmap
 
-- [ ] Real accounts and a backend behind `js/store.js`
+- [ ] Connect the accounts backend ([docs/BACKEND.md](docs/BACKEND.md)), then move the demo collections behind it too
 - [ ] Final logo files from the designer (drop into `icons/`, same names)
 - [ ] Editable assessment scores for the team, with agreed weights
 - [ ] Notifications when a gate is passed or feedback arrives

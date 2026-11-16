@@ -10,12 +10,23 @@
 var Store = (function(){
   var KEY = "iconGreenV1", NEWS_KEY = "iconGreenNews";
   var FILES = ["projects", "waste", "partners", "investors", "activity"];
-  var seed = {}, news = [], state = {user: null, lang: "ar", changes: {}, installSeen: false};
+  var seed = {}, news = [], state = {user: null, lang: "ar", changes: {}, installSeen: false, session: null};
+  var syncTimer = null;
 
   /* ---- private: storage ---- */
   function read(k){ try{ return JSON.parse(localStorage.getItem(k) || "null"); }catch(e){ return null; } }
   function write(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
-  function persist(){ write(KEY, state); }
+  function persist(){ write(KEY, state); queueSync(); }
+  /* with a backend connected, every saved change also goes to the user's account a moment later */
+  function cloud(){ return !!(window.Backend && Backend.on); }
+  function setSession(s){ state.session = s; write(KEY, state); }
+  function queueSync(){
+    if (!cloud() || !state.session || !state.user) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(function(){
+      Backend.fresh(state.session, setSession).then(function(sn){ return Backend.saveProgress(sn, {changes: state.changes, lang: state.lang, role: state.user && state.user.role}); }).catch(function(){});
+    }, 1200);
+  }
   function iso(d){ return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function today(){ return iso(new Date()); }
   function daysAgo(n){ var d = new Date(); d.setDate(d.getDate() - n); return iso(d); }
@@ -58,7 +69,7 @@ var Store = (function(){
   /* ---- start-up ---- */
   function init(){
     var saved = read(KEY);
-    if (saved && typeof saved === "object"){ state.user = saved.user || null; state.lang = saved.lang === "en" ? "en" : "ar"; state.changes = saved.changes || {}; state.installSeen = !!saved.installSeen; }
+    if (saved && typeof saved === "object"){ state.user = saved.user || null; state.lang = saved.lang === "en" ? "en" : "ar"; state.changes = saved.changes || {}; state.installSeen = !!saved.installSeen; state.session = saved.session || null; }
     news = read(NEWS_KEY) || [];
     return load();
   }
@@ -67,13 +78,38 @@ var Store = (function(){
   function getUser(){ return state.user; }
   function signIn(profile){
     var byRole = {}; byRole[profile.role] = profile.fields || {};
-    state.user = {role: profile.role, name: profile.name, org: profile.org || "", city: profile.city || "", fields: profile.fields || {}, fieldsByRole: byRole, date: today()};
+    state.user = {role: profile.role, name: profile.name, email: profile.email || "", org: profile.org || "", city: profile.city || "", fields: profile.fields || {}, fieldsByRole: byRole, date: today()};
     /* each sign-up on this device is one row in the demand panel */
     put("signups", {id: "su-me-" + profile.role, local: true, role: profile.role, city: profile.city || "other", waste: (profile.fields || {}).waste || null, date: today()});
     persist();
     return state.user;
   }
-  function signOut(){ state.user = null; persist(); }
+  function signOut(){ if (cloud() && state.session) Backend.signOut(state.session); clearTimeout(syncTimer); state.user = null; state.session = null; write(KEY, state); }
+
+  /* ---- accounts ----
+     accountMode() is "device" until js/config.js names a backend, then "cloud".
+     register(profile) -> {done: true} on the device, or {needCode: true} after a 6-digit code was emailed.
+     confirm(profile, code) checks the code, opens the account and brings back progress saved on another device. */
+  function accountMode(){ return cloud() ? "cloud" : "device"; }
+  function register(profile){
+    if (!cloud()){ signIn(profile); return Promise.resolve({done: true}); }
+    return Backend.sendCode(profile.email).then(function(){ return {needCode: true}; });
+  }
+  function confirm(profile, code){
+    return Backend.verify(profile.email, code).then(function(sn){
+      state.session = sn;
+      return Backend.loadProgress(sn).catch(function(){ return null; }).then(function(saved){
+        if (saved && saved.changes && !Object.keys(state.changes).length) state.changes = saved.changes;
+        signIn(profile);
+        return Backend.saveProfile(sn, {name: profile.name, role: profile.role, city: profile.city, fields: profile.fields, lang: state.lang}).catch(function(){}).then(function(){ return {done: true}; });
+      });
+    });
+  }
+  /* sign-up totals across every device (cloud only). Resolves to null on the device. */
+  function remoteCounts(){
+    if (!cloud() || !state.session) return Promise.resolve(null);
+    return Backend.fresh(state.session, setSession).then(function(sn){ return Backend.counts(sn); }).catch(function(){ return null; });
+  }
   function switchRole(role){
     if (!state.user) return;
     var defaults = {founder: {waste: "plastic", idea_stage: "prototype"}, waste_owner: {waste: "plastic", tonnes: 120}, partner: {partner_type: "lab"}, investor: {investor_type: "fund", sectors: ["plastic", "batteries", "organic"]}, team: {}};
@@ -158,7 +194,7 @@ var Store = (function(){
 
   return {
     init: init, today: today,
-    getUser: getUser, signIn: signIn, signOut: signOut, switchRole: switchRole, getLang: getLang, setLang: setLang, installSeen: installSeen, me: me, resetDemo: resetDemo,
+    getUser: getUser, signIn: signIn, signOut: signOut, accountMode: accountMode, register: register, confirm: confirm, remoteCounts: remoteCounts, switchRole: switchRole, getLang: getLang, setLang: setLang, installSeen: installSeen, me: me, resetDemo: resetDemo,
     getProjects: getProjects, getProject: getProject, saveProject: saveProject, myProjects: myProjects, tick: tick, passGate: passGate, sendFeedback: sendFeedback,
     getOwners: getOwners, getOwner: getOwner, getStreams: getStreams, myStreams: myStreams, saveStream: saveStream, getChallenges: getChallenges,
     getPartners: getPartners, getPartner: getPartner, savePartner: savePartner, getRequests: getRequests, saveRequest: saveRequest,

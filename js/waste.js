@@ -40,7 +40,7 @@
   }
   function solutions(){
     var list = solutionsFor(Store.myStreams());
-    return '<div class="stack">' + UI.head(t("tab_solutions"), {sub: t("solutions_sub")}) +
+    return '<div class="stack">' + UI.head(t("tab_solutions"), {}) +
       (list.length ? '<div class="list">' + list.map(function(p){
         var failed = Screens.shared.isFailed(p, p.stage);
         return '<div class="card"><div class="between"><h2 dir="auto">' + esc(L(p, "name")) + "</h2>" + UI.pill(I18N.opt("waste", p.waste)) + "</div>" +
