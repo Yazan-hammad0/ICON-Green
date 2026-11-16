@@ -1,0 +1,22 @@
+{
+  "owners": [
+    {"id": "o1", "name_ar": "مصنع المثال للتعبئة (تجريبي)", "name_en": "Example Packaging Factory (demo)", "city": "riyadh"},
+    {"id": "o2", "name_ar": "مقاولات البنيان (تجريبي)", "name_en": "Bunyan Contracting (demo)", "city": "jeddah"},
+    {"id": "o3", "name_ar": "بلدية الواحة النموذجية (تجريبي)", "name_en": "Model Oasis Municipality (demo)", "city": "ahsa"},
+    {"id": "o4", "name_ar": "أسطول الدرب (تجريبي)", "name_en": "Darb Fleet (demo)", "city": "dammam"}
+  ],
+  "streams": [
+    {"id": "s1", "owner": "o1", "waste": "plastic", "tonnes": 120, "city": "riyadh", "cost": 180, "challenge": true, "date_ago": 70,
+      "title_ar": "أغشية بلاستيكية مختلطة ملوثة بالأحبار", "title_en": "Mixed plastic film contaminated with ink"},
+    {"id": "s2", "owner": "o1", "waste": "glass", "tonnes": 60, "city": "riyadh", "cost": 140, "challenge": false, "date_ago": 30,
+      "title_ar": "عبوات زجاجية مرفوضة من خط التعبئة", "title_en": "Rejected glass containers from the filling line"},
+    {"id": "s3", "owner": "o2", "waste": "construction", "tonnes": 900, "city": "jeddah", "cost": 95, "challenge": true, "date_ago": 125,
+      "title_ar": "خرسانة هدم من مشاريع إزالة", "title_en": "Demolition concrete from clearance projects"},
+    {"id": "s4", "owner": "o3", "waste": "organic", "tonnes": 400, "city": "ahsa", "cost": 120, "challenge": true, "date_ago": 18,
+      "title_ar": "مخلفات أسواق الخضار وسعف النخيل", "title_en": "Produce market waste and palm fronds"},
+    {"id": "s5", "owner": "o4", "waste": "tyres", "tonnes": 45, "city": "dammam", "cost": 260, "challenge": true, "date_ago": 11,
+      "title_ar": "إطارات شاحنات تالفة", "title_en": "Worn truck tyres"},
+    {"id": "s6", "owner": "o4", "waste": "oils", "tonnes": 20, "city": "dammam", "cost": null, "challenge": false, "date_ago": 9,
+      "title_ar": "زيوت محركات مستعملة من ورشة الأسطول", "title_en": "Used engine oil from the fleet workshop"}
+  ]
+}

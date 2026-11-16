@@ -1,0 +1,50 @@
+{
+  "personas": [
+    {"founder": "f1", "owner": "o1", "investor": "inv1", "partner": {"lab": "pr1", "factory": "pr3", "university": "pr5", "expert": "pr6"}}
+  ],
+  "updates": [
+    {"id": "u1", "kind": "feedback", "date_ago": 4, "project": "p1", "gate": 2, "roles": ["founder"]},
+    {"id": "u2", "kind": "icon", "date_ago": 6, "roles": ["founder", "waste_owner", "partner", "investor", "team"],
+      "title_ar": "جلسة تعريفية بالمسار (مثال تجريبي)", "title_en": "Intro session on the journey (demo example)",
+      "body_ar": "جلسة قصيرة عن المراحل الست وما يُطلب في كل بوابة. الموعد والتسجيل يُضافان لاحقًا.", "body_en": "A short session on the six stages and what each gate asks for. Date and registration to be added later."},
+    {"id": "u3", "kind": "icon", "date_ago": 11, "roles": ["founder", "team"],
+      "title_ar": "تحدٍّ صناعي جديد: إطارات شاحنات تالفة في الدمام", "title_en": "New industrial challenge: worn truck tyres in Dammam",
+      "body_ar": "45 طنًا شهريًا تبحث عن حل. قدّم حلك من تبويب «قدّم».", "body_en": "45 tonnes per month looking for a solution. Send yours from the Submit tab."},
+    {"id": "u4", "kind": "gate", "date_ago": 23, "project": "p1", "gate": 1, "roles": ["founder"]},
+    {"id": "u5", "kind": "icon", "date_ago": 9, "roles": ["waste_owner", "team"],
+      "title_ar": "مشروعان في المسار يعملان على البلاستيك والزجاج", "title_en": "Two projects in the pipeline work on plastic and glass",
+      "body_ar": "راجع تبويب «الحلول» لمعرفة أين وصل كل مشروع.", "body_en": "See the Solutions tab for where each project stands."},
+    {"id": "u6", "kind": "icon", "date_ago": 2, "roles": ["partner", "team"],
+      "title_ar": "طلبات تجربة جديدة هذا الأسبوع", "title_en": "New trial requests this week",
+      "body_ar": "وصلت طلبات لاختبارات مخبرية ووقت على خطوط الإنتاج ومراجعات خبراء. اقبل ما يناسب طاقتك.", "body_en": "New requests for lab tests, line time and expert reviews are in. Accept what fits your capacity."},
+    {"id": "u7", "kind": "icon", "date_ago": 12, "roles": ["investor", "team"],
+      "title_ar": "ملف جديد جاهز في فرص الاستثمار", "title_en": "A new ready file in deal flow",
+      "body_ar": "مشروع للمخلفات العضوية اجتاز بوابة «ملف جاهز». الملخص في تبويب «الفرص».", "body_en": "An organic waste project passed the Ready file gate. The summary is in the Deals tab."},
+    {"id": "u8", "kind": "icon", "date_ago": 15, "roles": ["team"],
+      "title_ar": "مراجعة أسبوعية للمسار (ملاحظة داخلية تجريبية)", "title_en": "Weekly pipeline review (demo internal note)",
+      "body_ar": "مشروعان تجاوزا 30 يومًا في مرحلتهما. راجِع أسباب التأخر.", "body_en": "Two projects have been in their stage for over 30 days. Check what is holding them."}
+  ],
+  "signups": [
+    {"id": "su1", "role": "founder", "city": "riyadh", "waste": "plastic", "date_ago": 64},
+    {"id": "su2", "role": "founder", "city": "dammam", "waste": "tyres", "date_ago": 6},
+    {"id": "su3", "role": "founder", "city": "jeddah", "waste": "construction", "date_ago": 120},
+    {"id": "su4", "role": "founder", "city": "riyadh", "waste": "batteries", "date_ago": 210},
+    {"id": "su5", "role": "founder", "city": "ahsa", "waste": "organic", "date_ago": 300},
+    {"id": "su6", "role": "founder", "city": "jubail", "waste": "metals", "date_ago": 330},
+    {"id": "su7", "role": "founder", "city": "madinah", "waste": "glass", "date_ago": 38},
+    {"id": "su8", "role": "founder", "city": "yanbu", "waste": "oils", "date_ago": 420},
+    {"id": "su9", "role": "founder", "city": "riyadh", "waste": "textiles", "date_ago": 2},
+    {"id": "su10", "role": "waste_owner", "city": "riyadh", "waste": "plastic", "date_ago": 70},
+    {"id": "su11", "role": "waste_owner", "city": "jeddah", "waste": "construction", "date_ago": 125},
+    {"id": "su12", "role": "waste_owner", "city": "ahsa", "waste": "organic", "date_ago": 18},
+    {"id": "su13", "role": "waste_owner", "city": "dammam", "waste": "tyres", "date_ago": 11},
+    {"id": "su14", "role": "partner", "city": "riyadh", "date_ago": 90},
+    {"id": "su15", "role": "partner", "city": "jeddah", "date_ago": 80},
+    {"id": "su16", "role": "partner", "city": "riyadh", "date_ago": 75},
+    {"id": "su17", "role": "partner", "city": "jubail", "date_ago": 66},
+    {"id": "su18", "role": "partner", "city": "dammam", "date_ago": 50},
+    {"id": "su19", "role": "partner", "city": "riyadh", "date_ago": 44},
+    {"id": "su20", "role": "investor", "city": "riyadh", "date_ago": 150},
+    {"id": "su21", "role": "investor", "city": "jeddah", "date_ago": 95}
+  ]
+}

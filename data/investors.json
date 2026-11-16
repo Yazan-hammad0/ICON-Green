@@ -1,0 +1,36 @@
+{
+  "investors": [
+    {"id": "inv1", "type": "fund", "name_ar": "صندوق الأفق (تجريبي)", "name_en": "Horizon Fund (demo)", "sectors": ["plastic", "batteries", "organic", "metals"], "ticket": "t1_5m"},
+    {"id": "inv2", "type": "individual", "name_ar": "مستثمر فرد (تجريبي)", "name_en": "Individual investor (demo)", "sectors": ["construction", "tyres", "paper"], "ticket": "t500_1m"}
+  ],
+  "companies": [
+    {"id": "c1", "investor": "inv1", "name_ar": "حبيبات الخليج (تجريبي)", "name_en": "Gulf Pellets (demo)", "waste": "plastic", "city": "dammam", "stage": 6,
+      "invested": 2500000, "ownership": 18, "revenue": [210000, 225000, 240000, 262000, 281000, 305000], "tonnes_month": 310, "tonnes_total": 4100, "runway": 16, "updated_ago": 8},
+    {"id": "c2", "investor": "inv1", "name_ar": "بطاريات المدار (تجريبي)", "name_en": "Madar Batteries (demo)", "waste": "batteries", "city": "riyadh", "stage": 5,
+      "invested": 4000000, "ownership": 22, "revenue": [60000, 72000, 70000, 81000, 78000, 84000], "tonnes_month": 14, "tonnes_total": 96, "runway": 4, "updated_ago": 12},
+    {"id": "c3", "investor": "inv1", "name_ar": "سماد الوادي (تجريبي)", "name_en": "Wadi Compost (demo)", "waste": "organic", "city": "buraidah", "stage": 6,
+      "invested": 1800000, "ownership": 15, "revenue": [95000, 101000, 99000, 108000, 112000, 118000], "tonnes_month": 520, "tonnes_total": 5200, "runway": 9, "updated_ago": 20},
+    {"id": "c4", "investor": "inv1", "name_ar": "معادن الساحل (تجريبي)", "name_en": "Sahel Metals (demo)", "waste": "metals", "city": "jubail", "stage": 4,
+      "invested": 1200000, "ownership": 12, "revenue": [0, 0, 15000, 22000, 30000, 41000], "tonnes_month": 45, "tonnes_total": 180, "runway": 13, "updated_ago": 5, "gate_event": {"gate": 3, "date_ago": 5}},
+    {"id": "c5", "investor": "inv2", "name_ar": "ركام الحجاز (تجريبي)", "name_en": "Hijaz Aggregate (demo)", "waste": "construction", "city": "jeddah", "stage": 6,
+      "invested": 3000000, "ownership": 20, "revenue": [420000, 455000, 440000, 410000, 372000, 330000], "tonnes_month": 2600, "tonnes_total": 21000, "runway": 11, "updated_ago": 15},
+    {"id": "c6", "investor": "inv2", "name_ar": "مطاط الشمال (تجريبي)", "name_en": "North Rubber (demo)", "waste": "tyres", "city": "hail", "stage": 5,
+      "invested": 900000, "ownership": 10, "revenue": [48000, 52000, 55000, 57000, 61000, 66000], "tonnes_month": 70, "tonnes_total": 520, "runway": 15, "updated_ago": 52},
+    {"id": "c7", "investor": "inv2", "name_ar": "كرتون نجد (تجريبي)", "name_en": "Najd Cardboard (demo)", "waste": "paper", "city": "riyadh", "stage": 6,
+      "invested": 1500000, "ownership": 14, "revenue": [130000, 138000, 150000, 149000, 161000, 170000], "tonnes_month": 480, "tonnes_total": 5300, "runway": 20, "updated_ago": 3}
+  ],
+  "posts": [
+    {"id": "po1", "company": "c4", "date_ago": 5, "text_ar": "اجتزنا بوابة الجدوى المثبتة. وقّعنا خطاب نوايا مع مصنع صب لشراء 30 طنًا شهريًا.", "text_en": "We passed the proven feasibility gate. We signed a letter of intent with a foundry for 30 tonnes per month."},
+    {"id": "po2", "company": "c1", "date_ago": 8, "text_ar": "إيراد الشهر الماضي 305 آلاف ريال. بدأنا وردية ثانية على خط البثق.", "text_en": "Last month's revenue was SAR 305,000. We started a second shift on the extrusion line."},
+    {"id": "po3", "company": "c2", "date_ago": 12, "text_ar": "تأخرت شهادة السلامة ستة أسابيع، وهذا يضغط على السيولة. نعمل على جولة تمويل جسرية.", "text_en": "The safety certificate is six weeks late, which is squeezing cash. We are working on a bridge round."},
+    {"id": "po4", "company": "c3", "date_ago": 20, "text_ar": "وقّعنا عقد توريد مع ثلاث مشاتل. الطلب الموسمي أعلى من طاقتنا الحالية.", "text_en": "We signed supply contracts with three nurseries. Seasonal demand is above our current capacity."},
+    {"id": "po5", "company": "c1", "date_ago": 39, "text_ar": "حصلنا على مصدر ثانٍ للأغشية البلاستيكية من مصنع تعبئة في الدمام.", "text_en": "We secured a second source of plastic film from a packaging factory in Dammam."},
+    {"id": "po6", "company": "c7", "date_ago": 3, "text_ar": "أضفنا مكبسًا ثانيًا للكرتون ورفعنا الطاقة إلى 480 طنًا شهريًا.", "text_en": "We added a second cardboard baler and raised capacity to 480 tonnes per month."},
+    {"id": "po7", "company": "c5", "date_ago": 15, "text_ar": "انخفض الطلب للشهر الثالث بسبب توقف مشروعين للطرق. نبحث عن مشترين في قطاع البلوك.", "text_en": "Demand fell for a third month because two road projects paused. We are looking for buyers in the block sector."},
+    {"id": "po8", "company": "c6", "date_ago": 52, "text_ar": "بدأنا توريد حبيبات المطاط لمقاول أرضيات في حائل.", "text_en": "We started supplying rubber crumb to a flooring contractor in Hail."}
+  ],
+  "meetings": [
+    {"id": "m1", "investor": "inv2", "project": "p6", "date_ago": 3},
+    {"id": "m2", "investor": "inv1", "project": "p5", "date_ago": 7}
+  ]
+}

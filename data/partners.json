@@ -1,0 +1,38 @@
+{
+  "partners": [
+    {"id": "pr1", "type": "lab", "name_ar": "مختبر القياس (تجريبي)", "name_en": "Qiyas Lab (demo)", "city": "riyadh", "capacity": 12, "pricing": "per_test", "available": true,
+      "offers_ar": "اختبارات البوليمرات: معدل الانسياب، نسبة الشوائب، الخواص الميكانيكية.", "offers_en": "Polymer testing: melt flow rate, contamination level, mechanical properties."},
+    {"id": "pr2", "type": "lab", "name_ar": "مختبر البيئة النموذجي (تجريبي)", "name_en": "Model Environment Lab (demo)", "city": "jeddah", "capacity": 8, "pricing": "per_test", "available": true,
+      "offers_ar": "اختبارات بيئية: الارتشاح، المعادن الثقيلة، تحليل المياه.", "offers_en": "Environmental testing: leaching, heavy metals, water analysis."},
+    {"id": "pr3", "type": "factory", "name_ar": "مصنع الخط التجريبي للبلاستيك", "name_en": "Pilot Line Plastics Factory (demo)", "city": "riyadh", "capacity": 4, "pricing": "per_day", "available": true,
+      "offers_ar": "خط غسيل وبثق بطاقة 300 كجم في الساعة، مع فني تشغيل.", "offers_en": "A washing and extrusion line, 300 kg per hour, with an operator."},
+    {"id": "pr4", "type": "factory", "name_ar": "مصنع الصهر النموذجي (تجريبي)", "name_en": "Model Smelting Works (demo)", "city": "jubail", "capacity": 3, "pricing": "per_day", "available": true,
+      "offers_ar": "فرن حثّي 2 طن وخط صب سبائك للتجارب الصغيرة.", "offers_en": "A 2 tonne induction furnace and an ingot casting line for small trials."},
+    {"id": "pr5", "type": "university", "name_ar": "جامعة المعرفة التجريبية", "name_en": "Knowledge University (demo)", "city": "dammam", "capacity": 20, "pricing": "per_hour", "available": true,
+      "offers_ar": "مركز أبحاث المواد: توصيف المواد، ومراجعة علمية لبروتوكولات الاختبار.", "offers_en": "Materials research centre: material characterisation and scientific review of test protocols."},
+    {"id": "pr6", "type": "expert", "name_ar": "خبير بيئي مستقل (تجريبي)", "name_en": "Independent environmental expert (demo)", "city": "riyadh", "capacity": 30, "pricing": "per_hour", "available": true,
+      "offers_ar": "مسار التراخيص البيئية، ودراسات الأثر البيئي، ومراجعة خطط السلامة.", "offers_en": "Environmental permit routes, impact assessments, and safety plan reviews."}
+  ],
+  "requests": [
+    {"id": "r1", "project": "p1", "kind": "lab_test", "types": ["lab", "university"], "status": "open", "date_ago": 3,
+      "note_ar": "قياس معدل الانسياب ونسبة الشوائب لثلاث دفعات من الحبيبات بعد مرحلة الغسيل الثانية.", "note_en": "Melt flow rate and contamination level for three pellet batches after the second washing step."},
+    {"id": "r2", "project": "p7", "kind": "lab_test", "types": ["lab"], "status": "open", "date_ago": 5,
+      "note_ar": "تحليل التركيب الكيميائي لمسحوق الزجاج وحجم الحبيبات.", "note_en": "Chemical composition and particle size analysis of the glass powder."},
+    {"id": "r3", "project": "p1", "kind": "line_time", "types": ["factory"], "status": "open", "date_ago": 2,
+      "note_ar": "يومان على خط غسيل وبثق لإعادة التجربة على 4 أطنان.", "note_en": "Two days on a washing and extrusion line to repeat the trial on 4 tonnes."},
+    {"id": "r4", "project": "p3", "kind": "line_time", "types": ["factory"], "status": "open", "date_ago": 8,
+      "note_ar": "يوم واحد على كسّارة لاختبار دفعة ثالثة من الركام.", "note_en": "One day on a crusher to test a third batch of aggregate."},
+    {"id": "r5", "project": "p4", "kind": "expert_review", "types": ["expert", "university"], "status": "open", "date_ago": 4,
+      "note_ar": "مراجعة بروتوكول السلامة لتفكيك البطاريات وتخزينها.", "note_en": "Review of the safety protocol for dismantling and storing batteries."},
+    {"id": "r6", "project": "p2", "kind": "expert_review", "types": ["expert"], "status": "open", "date_ago": 1,
+      "note_ar": "تحديد مسار الترخيص البيئي لموقع طحن الإطارات.", "note_en": "Map the environmental permit route for a tyre grinding site."},
+    {"id": "r7", "project": "p4", "kind": "lab_test", "types": ["university", "lab"], "status": "open", "date_ago": 6,
+      "note_ar": "قياس السعة ودورة الحياة لعينة من 50 خلية.", "note_en": "Capacity and cycle life measurement on a sample of 50 cells."},
+    {"id": "r8", "project": "p3", "kind": "lab_test", "types": ["lab"], "status": "accepted", "partner": "pr2", "date_ago": 20, "replied_ago": 16,
+      "note_ar": "اختبار الارتشاح لعينات الركام المعاد تدويره.", "note_en": "Leaching test on recycled aggregate samples."},
+    {"id": "r9", "project": "p6", "kind": "line_time", "types": ["factory"], "status": "accepted", "partner": "pr4", "date_ago": 60, "replied_ago": 55,
+      "note_ar": "ثلاثة أيام على فرن الصهر لتجربة 12 طنًا.", "note_en": "Three days on the furnace for a 12 tonne trial."},
+    {"id": "r10", "project": "p5", "kind": "lab_test", "types": ["lab", "university"], "status": "declined", "partner": "pr1", "date_ago": 48, "replied_ago": 45,
+      "note_ar": "تحليل العناصر الغذائية في السماد.", "note_en": "Nutrient analysis of the compost."}
+  ]
+}
