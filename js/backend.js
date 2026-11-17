@@ -1,6 +1,6 @@
 /* Talks to the accounts backend (Supabase) with plain fetch, no library. Only js/store.js calls this file.
    Backend.on is false until js/config.js is filled in; then nothing here runs and accounts stay on the device.
-   Tables, rules and the email template it expects are in docs/BACKEND.md. */
+   Tables, rules and the one setting it expects are in docs/BACKEND.md. */
 var Backend = (function(){
   var cfg = window.ICON_CONFIG || {}, base = String(cfg.supabaseUrl || "").replace(/\/+$/, ""), key = cfg.supabaseKey || "";
   var on = /^https:\/\//.test(base) && key.length > 20;
@@ -12,16 +12,21 @@ var Backend = (function(){
       .then(function(r){
         return r.text().then(function(txt){
           var data = null; try{ data = txt ? JSON.parse(txt) : null; }catch(e){}
-          if (!r.ok){ var err = new Error((data && (data.msg || data.message || data.error_description || data.error)) || ("HTTP " + r.status)); err.status = r.status; throw err; }
+          if (!r.ok){ var err = new Error((data && (data.msg || data.message || data.error_description || data.error)) || ("HTTP " + r.status)); err.status = r.status; err.code = data && (data.error_code || data.code); throw err; }
           return data;
         });
       });
   }
   function toSession(d){ return {access: d.access_token, refresh: d.refresh_token, uid: d.user && d.user.id, email: d.user && d.user.email, exp: Date.now() + (Number(d.expires_in) || 3600) * 1000}; }
 
-  /* email a 6-digit code (creates the account on first use) */
-  function sendCode(email){ return call("/auth/v1/otp", {email: email, create_user: true}); }
-  function verify(email, code){ return call("/auth/v1/verify", {type: "email", email: email, token: code}).then(toSession); }
+  /* a new account by email and password. "Confirm email" must be off in Supabase, or no session comes back. */
+  function signUp(email, password){
+    return call("/auth/v1/signup", {email: email, password: password}).then(function(d){
+      if (!d || !d.access_token){ var err = new Error("no session"); err.status = 409; err.code = "no_session"; throw err; }
+      return toSession(d);
+    });
+  }
+  function signIn(email, password){ return call("/auth/v1/token?grant_type=password", {email: email, password: password}).then(toSession); }
   /* a fresh access token when the old one is about to run out; onSession lets the store save it */
   function fresh(session, onSession){
     if (session.exp - Date.now() > 60000) return Promise.resolve(session);
@@ -41,5 +46,5 @@ var Backend = (function(){
   function counts(session){ return call("/rest/v1/rpc/signup_counts", {}, session.access); }
   function signOut(session){ return call("/auth/v1/logout", {}, session.access).catch(function(){}); }
 
-  return {on: on, sendCode: sendCode, verify: verify, fresh: fresh, saveProfile: saveProfile, loadProfile: loadProfile, saveProgress: saveProgress, loadProgress: loadProgress, counts: counts, signOut: signOut};
+  return {on: on, signUp: signUp, signIn: signIn, fresh: fresh, saveProfile: saveProfile, loadProfile: loadProfile, saveProgress: saveProgress, loadProgress: loadProgress, counts: counts, signOut: signOut};
 })();

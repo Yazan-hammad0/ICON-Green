@@ -1,5 +1,5 @@
 // ICON Green offline cache. release.py stamps VERSION; a new VERSION makes phones download everything fresh.
-const VERSION = "7b6e4dbf57";
+const VERSION = "494425c40f";
 const CACHE = "icongreen-" + VERSION;
 const SHELL = ["./", "./index.html", "./css/app.css", "./js/brand.js", "./js/i18n.js", "./js/config.js", "./js/backend.js", "./js/store.js", "./js/ui.js", "./js/news.js", "./js/auth.js", "./js/onboard.js", "./js/founder.js", "./js/waste.js", "./js/partner.js", "./js/investor.js", "./js/team.js", "./js/app.js", "./js/shell.js", "./manifest.webmanifest",
   "./data/projects.json", "./data/waste.json", "./data/partners.json", "./data/investors.json", "./data/activity.json",

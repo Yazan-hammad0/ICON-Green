@@ -1,12 +1,14 @@
-# Real accounts in 15 minutes
+# Real accounts
 
-GitHub Pages only serves files. It cannot store accounts. So today the app keeps each account on the device it was created on.
+GitHub Pages only serves files. It cannot store accounts. So the app uses a free Supabase project for them: one account per email with a password, progress saved to the account, and sign-ups counted across every device. The code is in `js/backend.js`. The project's address and public key are in `js/config.js`.
 
-To make registration real (one account per email, progress saved to the account, sign-ups counted across every device), connect a free Supabase project. The app already has the code for it in `js/backend.js`. You only fill in two values.
+This is connected since version 0.3.0. The steps below are how it was set up, in case the project is ever replaced.
 
-What changes for a visitor once this is connected: after typing their email they get a 6-digit code by email, type it in, and they are in. No password.
+## Why a password and not an emailed code
 
-> Not tested against a live Supabase project yet. It is tested against a stand-in backend in `tools/walk.js`. Do one real sign-up yourself after step 5.
+On Supabase's free built-in email sender the email templates are locked, and it only delivers to members of the Supabase team. So an emailed code cannot reach real visitors. Registration therefore uses email and password, with email confirmation turned off. The two costs: emails are not verified, and a forgotten password cannot be reset from the app.
+
+To move to verified emails later: add your own sender under **Authentication**, **Emails**, **SMTP Settings** (this needs a domain you own), turn **Confirm email** back on, and add a reset-password screen.
 
 ## 1. Create the project
 
@@ -56,25 +58,15 @@ revoke all on function public.signup_counts() from public, anon;
 grant execute on function public.signup_counts() to authenticated;
 ```
 
-## 3. Make the email carry a code
+## 3. Sign-up settings
 
-1. Open **Authentication**, then **Emails** (or **Email Templates**), then **Magic Link**.
-2. Put this in the message body, so the email shows the 6-digit code:
-
-   ```html
-   <h2>ICON Green</h2>
-   <p>Your code: <strong>{{ .Token }}</strong></p>
-   <p>رمز الدخول: <strong>{{ .Token }}</strong></p>
-   ```
-
-3. Open **Authentication**, then **URL Configuration**. Set **Site URL** to `https://yazan-hammad0.github.io/ICON-Green/`.
-
-Supabase's built-in email sender only allows a few emails per hour. That is enough to try it. Before sharing the link widely, add your own sender under **Authentication**, then **SMTP Settings**.
+1. Open **Authentication**, then **Sign In / Providers**. Under **User Signups** turn **Confirm email** off and press **Save changes**. Leave **Allow new users to sign up** on.
+2. Open **Authentication**, then **URL Configuration**. Set **Site URL** to `https://yazan-hammad0.github.io/ICON-Green/`.
 
 ## 4. Put the two values in the app
 
-1. In Supabase open **Project Settings**, then **API**.
-2. Copy the **Project URL** and the **anon public** key.
+1. In Supabase open **Project Settings**, then **API Keys**, then the **Legacy** tab.
+2. Copy the **anon public** key. The Project URL is `https://<project id>.supabase.co`.
 3. Open `js/config.js` and paste them:
 
    ```js
@@ -92,17 +84,21 @@ The anon key is meant to be public. The rules from step 2 are what protect the d
 python3 release.py "Accounts now work across devices"
 ```
 
-Then commit and push. Open the live app, register with your own email, type the code, and check that a row appears in **Table Editor**, `profiles`.
+Then commit and push. Open the live app, register with your own email and a password, and check that a row appears in **Table Editor**, `profiles`.
 
 ## What is stored
 
 | Where | What |
 |---|---|
-| `auth.users` (Supabase) | Email address, sign-in times |
+| `auth.users` (Supabase) | Email address, the password as a one-way hash, sign-in times |
 | `profiles` | Name, email, role, city, the few answers from registration, language |
 | `progress` | The records the person changed or added in the app |
 
-This is personal data. Before real people register, update `SECURITY.md` and add a short privacy notice to the registration screen saying what is stored, why, and how to ask for deletion.
+This is personal data. The registration screen says what is stored and why. To delete an account, remove the person under **Authentication**, **Users**; their `profiles` and `progress` rows go with it.
+
+## Forgotten passwords
+
+There is no reset from the app yet. Under **Authentication**, **Users**, delete the account and ask the person to register again. Their saved progress is lost.
 
 ## Seeing who registered
 

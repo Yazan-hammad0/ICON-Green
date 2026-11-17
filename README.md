@@ -180,7 +180,7 @@ Every item must be real, dated and linked, and someone must open the link and ch
 
 ## Accounts
 
-Registration asks for a name and an email. Out of the box the account lives on the device, because GitHub Pages cannot store anything. Fill in two values in `js/config.js` and it becomes real: a 6-digit code by email, one account per email, progress saved to the account, and sign-ups counted across devices. The 15 minute setup is in [docs/BACKEND.md](docs/BACKEND.md).
+Registration asks for a name, an email and a password. GitHub Pages cannot store anything, so accounts live in a free Supabase project named in `js/config.js`: one account per email, progress saved to the account, and sign-ups counted across devices. Empty the two values and accounts stay on the device. Setup and limits are in [docs/BACKEND.md](docs/BACKEND.md).
 
 ## Swapping in a real backend
 

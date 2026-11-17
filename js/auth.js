@@ -1,8 +1,9 @@
 /* Before sign-in: a short welcome with a "what you get" showcase per role, then registration by email.
-   On the device registration is instant. With a backend connected (js/config.js) it asks for an emailed 6-digit code. */
+   On the device registration is instant. With a backend connected (js/config.js) it also asks for a password,
+   and people who registered before can sign in on a new device. */
 var Auth = (function(){
   var t = function(k, v){ return I18N.t(k, v); }, esc = UI.esc;
-  var SHOW = ["founder", "waste_owner", "partner", "investor"], show = "founder", pending = null, busy = false;
+  var SHOW = ["founder", "waste_owner", "partner", "investor"], show = "founder", busy = false;
 
   function langButton(){
     var other = I18N.lang() === "ar" ? "en" : "ar";
@@ -29,7 +30,7 @@ var Auth = (function(){
       '<div class="card showcase" role="tabpanel" id="showcase"><h2>' + t("sc_" + show) + '</h2><ul class="gets">' +
         [1, 2, 3].map(function(n){ return "<li>" + UI.icon("check") + "<span>" + t("sc_" + show + "_" + n) + "</span></li>"; }).join("") + "</ul>" + preview(show) +
         '<a class="btn pop" href="#/signin/' + show + '">' + t("start_as", {role: I18N.opt("role_short", show)}) + "</a></div>" +
-      '<div class="btnrow">' + (window.ICON_SHELL && ICON_SHELL.standalone() ? "" : '<a class="btn small" href="#/install">' + t("install_title") + "</a>") + '<a class="btn small quiet" href="#/signin/team">' + t("team_link") + "</a></div>" +
+      '<div class="btnrow">' + (window.ICON_SHELL && ICON_SHELL.standalone() ? "" : '<a class="btn small" href="#/install">' + t("install_title") + "</a>") + '<a class="btn small quiet" href="#/signin/team">' + t("team_link") + "</a>" + (Store.accountMode() === "cloud" ? '<a class="btn small quiet" href="#/signin/login">' + t("login_title") + "</a>" : "") + "</div>" +
       '<p class="soft small center">' + t("w_demo_note") + "</p></div>";
   }
   function roleFields(r){
@@ -48,29 +49,38 @@ var Auth = (function(){
       '<form data-form="signin" data-role="' + r + '">' +
         UI.input("name", t("f_name"), {required: true, maxlength: 60, autocomplete: "name"}) +
         UI.input("email", t("f_email"), {type: "email", required: true, maxlength: 120, autocomplete: "email", inputmode: "email"}) +
+        (cloud ? UI.input("password", t("f_password"), {type: "password", required: true, maxlength: 72, autocomplete: "new-password"}) : "") +
         UI.select("city", t("f_city"), I18N.keys("city"), "city", {required: true}) +
         roleFields(r) +
         '<p class="formerr" id="formerr" role="alert" hidden></p>' +
-        '<button class="btn pop" type="submit">' + t(cloud ? "reg_send" : "reg_go") + "</button>" +
-        '<p class="soft small">' + t(cloud ? "reg_note_cloud" : "reg_note_device") + "</p></form></div>";
+        '<button class="btn pop" type="submit">' + t("reg_go") + "</button>" +
+        '<p class="soft small">' + t(cloud ? "reg_note_cloud" : "reg_note_device") + "</p></form>" +
+      (cloud ? '<a class="btn small quiet" href="#/signin/login">' + t("have_account") + "</a>" : "") + "</div>";
   }
-  function codeStep(){
-    return '<div class="stack"><a class="back" href="#/signin/' + pending.role + '">' + UI.icon("back", "flip") + t("back") + "</a>" +
-      "<h1>" + t("code_title") + '</h1><p class="soft">' + t("code_sub", {email: '<b class="ltr">' + esc(pending.email) + "</b>"}) + "</p>" +
-      '<form data-form="code">' + UI.input("code", t("f_code"), {required: true, maxlength: 8, inputmode: "numeric", autocomplete: "one-time-code"}) +
+  function loginForm(){
+    return '<div class="stack"><a class="back" href="#/welcome">' + UI.icon("back", "flip") + t("back") + "</a>" +
+      "<h1>" + t("login_title") + "</h1>" +
+      '<form data-form="login">' +
+        UI.input("email", t("f_email"), {type: "email", required: true, maxlength: 120, autocomplete: "email", inputmode: "email"}) +
+        UI.input("password", t("f_password_in"), {type: "password", required: true, maxlength: 72, autocomplete: "current-password"}) +
         '<p class="formerr" id="formerr" role="alert" hidden></p>' +
-        '<button class="btn pop" type="submit">' + t("code_go") + "</button></form>" +
-      '<button type="button" class="btn small quiet" data-act="code-again">' + t("code_again") + "</button></div>";
+        '<button class="btn pop" type="submit">' + t("login_go") + "</button></form></div>";
   }
   function render(p){
     if (p[0] === "signin"){
-      if (p[1] === "code" && pending) return codeStep();
+      if (p[1] === "login" && Store.accountMode() === "cloud") return loginForm();
       return p[1] && App.ROLES.indexOf(p[1]) >= 0 ? form(p[1]) : welcome();
     }
     return welcome();
   }
   function fail(msg){ var el = document.getElementById("formerr"); if (el){ el.textContent = msg; el.hidden = false; } }
-  function enter(){ pending = null; App.go("#/"); }
+  function enter(){ App.go("#/"); }
+  var ERR = {exists: "acc_exists", wrong: "acc_wrong", weak: "pass_short", setup: "acc_setup", net: "net_bad"};
+  function send(formEl, promise){
+    var btn = formEl.querySelector("button[type=submit]"); busy = true; if (btn) btn.setAttribute("aria-busy", "true");
+    promise.then(function(){ busy = false; enter(); })
+      .catch(function(e){ busy = false; if (btn) btn.removeAttribute("aria-busy"); fail(t(ERR[e && e.kind] || "net_bad")); });
+  }
 
   App.actions["show-role"] = function(d){
     if (SHOW.indexOf(d.role) < 0 || d.role === show) return;
@@ -81,22 +91,18 @@ var Auth = (function(){
   App.forms.signin = function(d, formEl){
     if (busy) return;
     var role = formEl.getAttribute("data-role"), fields = {};
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email || "")){ fail(t("email_bad")); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((d.email || "").trim())){ fail(t("email_bad")); return; }
     ["waste", "tonnes", "partner_type", "investor_type", "sectors"].forEach(function(k){ if (d[k] !== undefined && d[k] !== "") fields[k] = k === "tonnes" ? Number(d[k]) : d[k]; });
-    var profile = {role: role, name: d.name, email: d.email.toLowerCase(), city: d.city, fields: fields};
-    var btn = formEl.querySelector("button[type=submit]"); busy = true; if (btn) btn.setAttribute("aria-busy", "true");
-    Store.register(profile).then(function(res){
-      busy = false;
-      if (res.needCode){ pending = profile; App.go("#/signin/code"); } else enter();
-    }).catch(function(){ busy = false; if (btn) btn.removeAttribute("aria-busy"); fail(t("net_bad")); });
+    var cloud = Store.accountMode() === "cloud";
+    if (cloud && String(d.password || "").length < 8){ fail(t("pass_short")); return; }
+    var profile = {role: role, name: d.name, email: d.email.trim().toLowerCase(), city: d.city, fields: fields};
+    send(formEl, Store.register(profile, d.password));
   };
-  App.forms.code = function(d, formEl){
-    if (busy || !pending) return;
-    var btn = formEl.querySelector("button[type=submit]"); busy = true; if (btn) btn.setAttribute("aria-busy", "true");
-    Store.confirm(pending, String(d.code || "").replace(/\s+/g, "")).then(function(){ busy = false; enter(); })
-      .catch(function(e){ busy = false; if (btn) btn.removeAttribute("aria-busy"); fail(t(e && e.status ? "code_bad" : "net_bad")); });
+  App.forms.login = function(d, formEl){
+    if (busy) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((d.email || "").trim())){ fail(t("email_bad")); return; }
+    send(formEl, Store.login(d.email.trim().toLowerCase(), d.password || ""));
   };
-  App.actions["code-again"] = function(){ if (!pending) return; Store.register(pending).then(function(){ UI.toast(t("code_sent")); }).catch(function(){ fail(t("net_bad")); }); };
 
   return {render: render};
 })();

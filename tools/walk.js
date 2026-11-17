@@ -8,6 +8,9 @@ async function run(cfg){
   const br = await chromium.launch();
   const ctx = await br.newContext({viewport: {width: cfg.w, height: cfg.h}, deviceScaleFactor: 2, isMobile: cfg.w < 500, hasTouch: cfg.w < 500, colorScheme: cfg.scheme, serviceWorkers: 'block',
     userAgent: cfg.w < 500 ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1' : undefined});
+  /* the main walk never talks to the real accounts backend: it runs with an empty config, so accounts stay on the device */
+  await ctx.route('**/js/config.js', r => r.fulfill({contentType: 'application/javascript', body: 'window.ICON_CONFIG = {supabaseUrl: "", supabaseKey: ""};'}));
+  await ctx.route('https://*.supabase.co/**', r => r.abort());
   await ctx.addInitScript(([lang, st]) => {
     if (st) Object.defineProperty(navigator, 'standalone', {get: () => true});
     if (!localStorage.getItem('iconGreenV1')) localStorage.setItem('iconGreenV1', JSON.stringify({lang, user: null, changes: {}}));
@@ -159,38 +162,55 @@ async function run(cfg){
   for (const r of ['waste_owner', 'partner', 'investor', 'team']) { await signIn(r); await signOut(); }
   await br.close();
 }
-/* registration against a fake accounts backend: code is emailed, checked, profile and progress are saved */
+/* registration against a fake accounts backend: account by email and password, profile and progress saved, then sign-in on a "new device" */
 async function cloudRun(){
-  const tag = 'cloud'; const note = (m) => problems.push(`[${tag}] ${m}`); const calls = [];
+  const tag = 'cloud'; const note = (m) => problems.push(`[${tag}] ${m}`); const calls = []; let profileRow = null;
   const br = await chromium.launch();
+  const device = async () => {
   const ctx = await br.newContext({viewport: {width: 375, height: 812}, serviceWorkers: 'block'});
   await ctx.addInitScript(() => { Object.defineProperty(navigator, 'standalone', {get: () => true}); });
   await ctx.route('**/js/config.js', r => r.fulfill({contentType: 'application/javascript', body: 'window.ICON_CONFIG = {supabaseUrl: "https://fake-project.supabase.co", supabaseKey: "fake-anon-key-0123456789abcdef"};'}));
   await ctx.route('https://fake-project.supabase.co/**', async (r) => {
-    const u = new URL(r.request().url()), body = r.request().postData() || ''; calls.push(r.request().method() + ' ' + u.pathname);
+    const u = new URL(r.request().url()), body = r.request().postData() || '', method = r.request().method(); calls.push(method + ' ' + u.pathname + (u.pathname === '/auth/v1/token' ? '?' + u.searchParams.get('grant_type') : ''));
     const json = (o, status = 200) => r.fulfill({status, contentType: 'application/json', body: JSON.stringify(o)});
-    if (u.pathname === '/auth/v1/otp') return json({});
-    if (u.pathname === '/auth/v1/verify') return JSON.parse(body).token === '123456' ? json({access_token: 'acc', refresh_token: 'ref', expires_in: 3600, user: {id: 'user-1', email: 'visitor@example.com'}}) : json({msg: 'Token has expired or is invalid'}, 403);
-    if (u.pathname === '/rest/v1/progress' && r.request().method() === 'GET') return json([]);
+    const session = {access_token: 'acc', refresh_token: 'ref', expires_in: 3600, user: {id: 'user-1', email: 'visitor@example.com'}};
+    if (u.pathname === '/auth/v1/signup') return JSON.parse(body).email === 'taken@example.com' ? json({code: 422, error_code: 'user_already_exists', msg: 'User already registered'}, 422) : json(session);
+    if (u.pathname === '/auth/v1/token') return JSON.parse(body).password === 'right-password' ? json(session) : json({code: 400, error_code: 'invalid_credentials', msg: 'Invalid login credentials'}, 400);
+    if (u.pathname === '/rest/v1/profiles' && method === 'GET') return json(profileRow ? [profileRow] : []);
+    if (u.pathname === '/rest/v1/profiles' && method === 'POST') { profileRow = JSON.parse(body); return json(null, 201); }
+    if (u.pathname === '/rest/v1/progress' && method === 'GET') return json([]);
     if (u.pathname === '/rest/v1/rpc/signup_counts') return json([{role: 'founder', city: 'riyadh', n: 3}, {role: 'investor', city: 'jeddah', n: 1}]);
     return json(null, 201);
   });
   const page = await ctx.newPage();
   page.on('pageerror', e => note('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/403/.test(m.text())) note('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error' && !/40[03]|422/.test(m.text())) note('console: ' + m.text()); });
+  return page;
+  };
+  let page = await device();
+  const submit = 'form[data-form=signin] button[type=submit]';
   await page.goto(base + '#/welcome'); await page.waitForSelector('.welcome');
   await page.click('a[href="#/signin/team"]'); await page.waitForSelector('form[data-form=signin]');
-  await page.fill('#f-name', 'Cloud Visitor'); await page.fill('#f-email', 'visitor@example.com'); await page.selectOption('#f-city', 'riyadh');
-  await page.click('form[data-form=signin] button[type=submit]'); await page.waitForSelector('form[data-form=code]');
-  await page.screenshot({path: `${shots}/cloud-code.png`});
-  await page.fill('#f-code', '000000'); await page.click('form[data-form=code] button[type=submit]'); await page.waitForSelector('#formerr:not([hidden])');
-  await page.fill('#f-code', '123456'); await page.click('form[data-form=code] button[type=submit]'); await page.waitForSelector('.tabbar a');
+  await page.fill('#f-name', 'Cloud Visitor'); await page.fill('#f-email', 'taken@example.com'); await page.fill('#f-password', 'short'); await page.selectOption('#f-city', 'riyadh');
+  await page.click(submit); await page.waitForSelector('#formerr:not([hidden])');
+  if (calls.length) note('short password reached the backend');
+  await page.fill('#f-password', 'wrong-password'); await page.click(submit); await page.waitForFunction(() => /registered|مسجّل/.test(document.getElementById('formerr').textContent));
+  await page.screenshot({path: `${shots}/cloud-register.png`, fullPage: true});
+  await page.fill('#f-email', 'visitor@example.com'); await page.fill('#f-password', 'right-password'); await page.click(submit); await page.waitForSelector('.tabbar a');
   await page.evaluate(() => { location.hash = '#/demand'; }); await page.waitForTimeout(600);
   if (!(await page.locator('main').innerText()).includes('4')) note('remote counts not shown');
   await page.screenshot({path: `${shots}/cloud-demand.png`, fullPage: true});
   await page.evaluate(() => { location.hash = '#/updates'; }); await page.waitForSelector('#f-title');
   await page.fill('#f-title', 'Cloud update'); await page.fill('#f-body', 'Body'); await page.click('form[data-form="post-update"] button[type=submit]'); await page.waitForTimeout(1800);
-  for (const need of ['POST /auth/v1/otp', 'POST /auth/v1/verify', 'POST /rest/v1/profiles', 'GET /rest/v1/progress', 'POST /rest/v1/progress', 'POST /rest/v1/rpc/signup_counts']) if (!calls.includes(need)) note('backend call missing: ' + need);
+  if (!profileRow || profileRow.role !== 'team' || profileRow.name !== 'Cloud Visitor') note('profile not saved to the account');
+  /* a new device: empty storage, sign in, the saved profile comes back */
+  page = await device(); await page.goto(base + '#/signin/login'); await page.waitForSelector('form[data-form=login]');
+  await page.fill('#f-email', 'visitor@example.com'); await page.fill('#f-password', 'nope-nope'); await page.click('form[data-form=login] button[type=submit]'); await page.waitForSelector('#formerr:not([hidden])');
+  await page.screenshot({path: `${shots}/cloud-login.png`});
+  await page.fill('#f-password', 'right-password'); await page.click('form[data-form=login] button[type=submit]'); await page.waitForSelector('.tabbar a');
+  const u = await page.evaluate(() => JSON.parse(localStorage.getItem('iconGreenV1')).user);
+  if (!u || u.role !== 'team' || u.name !== 'Cloud Visitor') note('sign-in on a new device did not bring the profile back');
+  for (const need of ['POST /auth/v1/signup', 'POST /auth/v1/token?password', 'POST /rest/v1/profiles', 'GET /rest/v1/profiles', 'GET /rest/v1/progress', 'POST /rest/v1/progress', 'POST /rest/v1/rpc/signup_counts']) if (!calls.includes(need)) note('backend call missing: ' + need);
   await br.close();
 }
 (async () => {

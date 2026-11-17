@@ -88,22 +88,42 @@ var Store = (function(){
 
   /* ---- accounts ----
      accountMode() is "device" until js/config.js names a backend, then "cloud".
-     register(profile) -> {done: true} on the device, or {needCode: true} after a 6-digit code was emailed.
-     confirm(profile, code) checks the code, opens the account and brings back progress saved on another device. */
+     register(profile, password) -> {done: true}. On the device the password is not used. In the cloud it opens a new account;
+     if the email already has one and the password fits, it opens that account instead.
+     login(email, password) opens an existing account on a new device and brings back its profile and progress.
+     Errors carry kind: "exists" (email taken, wrong password), "wrong" (bad email or password), "weak", "setup" or "net". */
   function accountMode(){ return cloud() ? "cloud" : "device"; }
-  function register(profile){
-    if (!cloud()){ signIn(profile); return Promise.resolve({done: true}); }
-    return Backend.sendCode(profile.email).then(function(){ return {needCode: true}; });
+  function kind(e, k){ var err = new Error(k); err.kind = k; return err; }
+  function sort(e){
+    if (e && e.kind) return e;
+    if (!e || !e.status) return kind(e, "net");
+    if (e.code === "weak_password") return kind(e, "weak");
+    if (e.code === "no_session" || e.code === "email_not_confirmed" || e.code === "signup_disabled" || e.code === "email_provider_disabled") return kind(e, "setup");
+    return kind(e, "wrong");
   }
-  function confirm(profile, code){
-    return Backend.verify(profile.email, code).then(function(sn){
-      state.session = sn;
-      return Backend.loadProgress(sn).catch(function(){ return null; }).then(function(saved){
-        if (saved && saved.changes && !Object.keys(state.changes).length) state.changes = saved.changes;
-        signIn(profile);
-        return Backend.saveProfile(sn, {name: profile.name, role: profile.role, city: profile.city, fields: profile.fields, lang: state.lang}).catch(function(){}).then(function(){ return {done: true}; });
-      });
+  /* the account is open: take its saved profile if it has one, else the one just typed, then its saved progress */
+  function open(sn, typed){
+    state.session = sn;
+    return Promise.all([Backend.loadProfile(sn).catch(function(){ return null; }), Backend.loadProgress(sn).catch(function(){ return null; })]).then(function(got){
+      var saved = got[0] && got[0].role ? got[0] : null, progress = got[1];
+      if (!saved && !typed){ state.session = null; throw kind(null, "wrong"); }
+      if (progress && progress.changes && !Object.keys(state.changes).length) state.changes = progress.changes;
+      var p = saved ? {role: saved.role, name: saved.name, city: saved.city || "", fields: saved.fields || {}, email: sn.email} : typed;
+      signIn(p);
+      if (saved) return {done: true};
+      return Backend.saveProfile(sn, {name: p.name, role: p.role, city: p.city, fields: p.fields, lang: state.lang}).catch(function(){}).then(function(){ return {done: true}; });
     });
+  }
+  function register(profile, password){
+    if (!cloud()){ signIn(profile); return Promise.resolve({done: true}); }
+    return Backend.signUp(profile.email, password).catch(function(e){
+      if (e && e.code === "user_already_exists") return Backend.signIn(profile.email, password).catch(function(e2){ throw e2 && e2.status ? kind(e2, "exists") : e2; });
+      throw e;
+    }).then(function(sn){ return open(sn, profile); }).catch(function(e){ throw sort(e); });
+  }
+  function login(email, password){
+    if (!cloud()) return Promise.reject(kind(null, "setup"));
+    return Backend.signIn(email, password).then(function(sn){ return open(sn, null); }).catch(function(e){ throw sort(e); });
   }
   /* sign-up totals across every device (cloud only). Resolves to null on the device. */
   function remoteCounts(){
@@ -194,7 +214,7 @@ var Store = (function(){
 
   return {
     init: init, today: today,
-    getUser: getUser, signIn: signIn, signOut: signOut, accountMode: accountMode, register: register, confirm: confirm, remoteCounts: remoteCounts, switchRole: switchRole, getLang: getLang, setLang: setLang, installSeen: installSeen, me: me, resetDemo: resetDemo,
+    getUser: getUser, signIn: signIn, signOut: signOut, accountMode: accountMode, register: register, login: login, remoteCounts: remoteCounts, switchRole: switchRole, getLang: getLang, setLang: setLang, installSeen: installSeen, me: me, resetDemo: resetDemo,
     getProjects: getProjects, getProject: getProject, saveProject: saveProject, myProjects: myProjects, tick: tick, passGate: passGate, sendFeedback: sendFeedback,
     getOwners: getOwners, getOwner: getOwner, getStreams: getStreams, myStreams: myStreams, saveStream: saveStream, getChallenges: getChallenges,
     getPartners: getPartners, getPartner: getPartner, savePartner: savePartner, getRequests: getRequests, saveRequest: saveRequest,

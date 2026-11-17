@@ -14,7 +14,7 @@ How the ICON Green demo app is put together, and how to grow it.
 
 `index.html` loads scripts in this order, and the order matters:
 
-1. `brand.js`, `i18n.js`, `store.js`, `ui.js`: no dependencies on screens.
+1. `brand.js`, `i18n.js`, `config.js`, `backend.js`, `store.js`, `ui.js`: no dependencies on screens.
 2. `app.js`: defines `App` and `Screens`. Screens register themselves on these.
 3. `news.js`, `auth.js`, `onboard.js`, then one file per role.
 4. `shell.js`: home-screen layout, service worker, update card.
@@ -88,7 +88,7 @@ Seed files give ages. Any key ending in `_ago` holds a number of days, and the s
 
 ### Accounts
 
-`Store.register(profile)` and `Store.confirm(profile, code)` are the only doors. With `js/config.js` empty, `register` saves the user on the device and resolves `{done: true}`. With a backend named, `register` emails a 6-digit code and resolves `{needCode: true}`; `confirm` checks the code, stores the session, saves the profile, and loads progress saved from another device. After that every `persist()` also queues a save of the user's changes to their account. `Store.remoteCounts()` returns sign-up totals for the demand panel. Setup: [BACKEND.md](BACKEND.md).
+`Store.register(profile, password)` and `Store.login(email, password)` are the only doors. With `js/config.js` empty, `register` saves the user on the device and resolves `{done: true}`. With a backend named, `register` opens a new account (or the existing one if the email is known and the password fits), saves the profile, and loads progress saved from another device; `login` opens an existing account and brings its profile back. A failure carries `kind`: `exists`, `wrong`, `weak`, `setup` or `net`. After sign-in every `persist()` also queues a save of the user's changes to their account. `Store.remoteCounts()` returns sign-up totals for the demand panel. Setup: [BACKEND.md](BACKEND.md).
 
 ### Moving to a real backend
 

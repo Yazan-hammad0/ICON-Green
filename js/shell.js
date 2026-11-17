@@ -1,5 +1,5 @@
 /* Screen-tall layout for the home-screen app, update card, service worker. Same idea as in Klaar. */
-var ICON_VERSION = "7b6e4dbf57", ICON_NEWS = "Clearer welcome, email registration, install guide for your browser, smoother motion";
+var ICON_VERSION = "494425c40f", ICON_NEWS = "Real accounts: register with email and a password, and your progress follows you to any device";
 (function(){
   var probe = document.createElement("div");
   probe.style.cssText = "position:fixed;left:0;top:0;width:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)";

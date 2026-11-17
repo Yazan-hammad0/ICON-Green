@@ -2,6 +2,18 @@
 
 All notable changes to the ICON Green app. Newest first.
 
+## 0.3.0, 17 November 2026
+
+Real accounts.
+
+### Added
+- Accounts are now real: register with email and a password, and your progress follows you to any device. Sign-ups are counted across devices in the team's demand panel.
+- Sign in on a new device from the welcome or registration screen.
+- The registration screen says what is stored and how to ask for deletion.
+
+### Changed
+- The emailed 6-digit code is gone for now. The free email sender cannot reach real visitors. It comes back once the project has its own sender.
+
 ## 0.2.0, 17 November 2026
 
 Less text, clearer value, real registration path, motion.
